@@ -1,10 +1,16 @@
 const csv = require('csvtojson')
+const fs = require('fs')
 
 const csvFilePath = 'data/table.csv'
-const filePath = '/data/output.json'
+const outputPath = 'data/output.txt'
 
-function onComplete() {
-    console.log('Всё гуд');
+let jsonArray = [];
+
+function createFile(jsonArray) {
+    fs.writeFile(outputPath, JSON.stringify(jsonArray, null, ' '), function (err) {
+        if (err) throw err;
+        console.log('File is created successfully.');
+      }); 
 }
 
 csv()   
@@ -12,6 +18,5 @@ csv()
 .subscribe((json,lineNumber)=>{
     console.log(lineNumber);
     console.log(json);
-},(error) => console.log(error), onComplete)
-
-//const jsonArray=csv().fromFile(filePath);
+    jsonArray.push(json);
+},(error) => console.log(error), () => createFile(jsonArray))
