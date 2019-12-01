@@ -5,8 +5,8 @@
   "scripts": {
     "build": "babel ./src --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "task1": "nodemon dist/task1.js",
-    "task2": "nodemon dist/task2.js"
+    "task1": "babel ./src/task1.js --out-dir dist && nodemon dist/task1.js",
+    "task2": "babel ./src/task2.js --out-dir dist && nodemon dist/task2.js"
   },
   "author": "",
   "license": "ISC",
