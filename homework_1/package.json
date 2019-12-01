@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "nodemon src/task1.js",
+    "build": "babel ./src --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "task1": "nodemon src/task1.js",
-    "task2": "nodemon src/task2.js"
+    "task1": "nodemon dist/task1.js",
+    "task2": "nodemon dist/task2.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/register": "^7.4.0",
     "nodemon": "^2.0.1"
   },
   "dependencies": {

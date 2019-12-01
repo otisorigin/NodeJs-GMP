@@ -1,14 +1,14 @@
-const process = require('process');
+import { stdin, stdout } from 'process';
 
-process.stdin.setEncoding('utf8');
+stdin.setEncoding('utf8');
 
-process.stdin.on('readable', () => {
+stdin.on('readable', () => {
   let chunk;
-  while ((chunk = process.stdin.read()) !== null) {
-    process.stdout.write(`${chunk.split('').reverse().join('')} \n`);
+  while ((chunk = stdin.read()) !== null) {
+    stdout.write(`${chunk.split('').reverse().join('')} \n`);
   }
 });
 
-process.stdin.on('end', () => {
-  process.stdout.write('end');
+stdin.on('end', () => {
+  stdout.write('end');
 });

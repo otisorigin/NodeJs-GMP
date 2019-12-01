@@ -1,5 +1,5 @@
-const csv = require('csvtojson')
-const fs = require('fs')
+import csv from 'csvtojson';
+import { writeFile } from 'fs';
 
 const csvFilePath = 'data/table.csv'
 const outputPath = 'data/output.txt'
@@ -7,7 +7,7 @@ const outputPath = 'data/output.txt'
 let jsonArray = [];
 
 function createFile(jsonArray) {
-    fs.writeFile(outputPath, JSON.stringify(jsonArray, null, ' '), function (err) {
+    writeFile(outputPath, JSON.stringify(jsonArray, null, ' '), function (err) {
         if (err) throw err;
         console.log('File is created successfully.');
       }); 
