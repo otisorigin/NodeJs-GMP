@@ -1,14 +1,30 @@
-import express from "express";
-const app = express();
-const port = 8081; // default port to listen
+// import errorHandler from "errorhandler";
 
-// define a route handler for the default home page
-app.get( "/", ( req, res ) => {
-    res.send( "Hello world!" );
-} );
+import app from "./app";
 
-// start the Express server
-app.listen( port, () => {
-    // tslint:disable-next-line:no-console
-    console.log( `server started at http://localhost:${ port }` );
-} );
+// /**
+//  * Error Handler. Provides full stack - remove for production
+//  */
+// app.use(errorHandler());
+
+/**sds
+ * Start Express server.
+ */
+const server = app.listen(app.get("port"), () => {
+    console.log(
+        "  App is running at http://localhost:%d in %s mode",
+        app.get("port"),
+        app.get("env")
+    );
+    console.log("  Press CTRL-C to stop!\n");
+});
+
+export default server;
+
+// type User = {
+//     id: string;
+//     login: string;
+//     password: string;
+//     age: number;
+//     isDeleted: boolean;
+// }
