@@ -6,16 +6,31 @@ const users = usersData.map(
   user => new User(user.id, user.login, user.password, user.age)
 );
 
-//добавить обработку ошибок!
 //добавить валидацию
-//добавить getAll с limit
 
 /**
  * GET /users/
- * Get all users.
+ * Get all users. In body parameters subLogin and limit.
  */
 export const findAllUsers = (req: Request, res: Response) => {
-  res.send(users.filter(user => user.isDeleted == false));
+  let availableUsers = users
+    .filter(user => user.isDeleted == false)
+    .sort((a, b) => (a.login > b.login ? 1 : -1));
+  let loginSubstring = req.body.loginSubstring;
+  let limit = req.body.limit;
+  if (
+    availableUsers.length > 0 &&
+    loginSubstring != undefined &&
+    limit != undefined
+  ) {
+    res.send(
+      availableUsers
+        .filter(user => user.login.includes(loginSubstring))
+        .slice(0, limit)
+    );
+  } else {
+    res.send(availableUsers);
+  }
 };
 
 /**
@@ -24,27 +39,69 @@ export const findAllUsers = (req: Request, res: Response) => {
  */
 export const findUser = (req: Request, res: Response) => {
   const id = req.params.id;
-  res.send(users.find(user => user.isDeleted == false && user.id == id));
+  let user = getUserById(id);
+  if (user != undefined) {
+    res.send(user);
+  } else {
+    res.status(204);
+  }
 };
 
+/**
+ * PUT /users/id
+ * Update user by id.
+ */
 export const updateUser = (req: Request, res: Response) => {
   const id = req.params.id;
-  const user = users.find(user => user.isDeleted == false && user.id == id);
+  const user = getUserById(id);
+  //Сделать через joi
+  // if (req.body) {
+  //   return res.status(400).send({
+  //     error: "Body can't be empty!"
+  //   });
+  // }
+  if (user == undefined) {
+    res.status(204);
+  }
   user.age = req.body.age;
   user.login = req.body.login;
   user.password = req.body.password;
   res.sendStatus(200);
 };
 
+/**
+ * POST /users
+ * Create new user.
+ */
 export const createUser = (req: Request, res: Response) => {
-  const user = new User(req.body.id, req.body.login, req.body.password, req.body.age);
-  users.push(user);
-  res.sendStatus(200);
+  let id = req.body.id;
+  if (getUserById(id) != undefined) {
+    res.status(400).send({
+      error: "User with such id already exists!"
+    });
+  } else {
+    const user = new User(id, req.body.login, req.body.password, req.body.age);
+    users.push(user);
+    res.status(201).send({
+      message: "User created."
+    });
+  }
 };
 
+/**
+ * DELETE /users/id
+ * Remove user by id.
+ */
 export const deleteUser = (req: Request, res: Response) => {
   const id = req.params.id;
-  const user = users.find(user => user.isDeleted == false && user.id == id);
-  user.isDeleted = true;
-  res.sendStatus(200);
+  const user = getUserById(id);
+  if (user != undefined) {
+    user.isDeleted = true;
+    res.sendStatus(200);
+  } else {
+    res.status(204);
+  }
 };
+
+const getUserById = (id: string) =>
+  users.find(user => user.isDeleted == false && user.id == id);
