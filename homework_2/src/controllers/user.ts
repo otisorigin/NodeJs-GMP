@@ -6,8 +6,6 @@ const users = usersData.map(
   user => new User(user.id, user.login, user.password, user.age)
 );
 
-//добавить валидацию
-
 /**
  * GET /users/
  * Get all users. In body parameters subLogin and limit.

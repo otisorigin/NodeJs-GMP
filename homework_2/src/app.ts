@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import validator from "./middlewares/userValidator";
+import validator from "./middlewares/requestValidator";
 import userSchema from "./schemas/userSchema";
 
 import userController from "./controllers/user";
@@ -9,10 +9,10 @@ import userController from "./controllers/user";
 const app = express();
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 app.set("port", process.env.PORT || 3000);
 
