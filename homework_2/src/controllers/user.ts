@@ -12,7 +12,7 @@ const users = usersData.map(
  * GET /users/
  * Get all users. In body parameters subLogin and limit.
  */
-export const findAllUsers = (req: Request, res: Response) => {
+const findAllUsers = (req: Request, res: Response) => {
   let availableUsers = users
     .filter(user => user.isDeleted == false)
     .sort((a, b) => (a.login > b.login ? 1 : -1));
@@ -37,7 +37,7 @@ export const findAllUsers = (req: Request, res: Response) => {
  * GET /users/id
  * Get user by id.
  */
-export const findUser = (req: Request, res: Response) => {
+const findUser = (req: Request, res: Response) => {
   const id = req.params.id;
   let user = getUserById(id);
   if (user != undefined) {
@@ -51,15 +51,9 @@ export const findUser = (req: Request, res: Response) => {
  * PUT /users/id
  * Update user by id.
  */
-export const updateUser = (req: Request, res: Response) => {
+const updateUser = (req: Request, res: Response) => {
   const id = req.params.id;
   const user = getUserById(id);
-  //Сделать через joi
-  // if (req.body) {
-  //   return res.status(400).send({
-  //     error: "Body can't be empty!"
-  //   });
-  // }
   if (user == undefined) {
     res.status(204);
   }
@@ -73,7 +67,7 @@ export const updateUser = (req: Request, res: Response) => {
  * POST /users
  * Create new user.
  */
-export const createUser = (req: Request, res: Response) => {
+const createUser = (req: Request, res: Response) => {
   let id = req.body.id;
   if (getUserById(id) != undefined) {
     res.status(400).send({
@@ -92,7 +86,7 @@ export const createUser = (req: Request, res: Response) => {
  * DELETE /users/id
  * Remove user by id.
  */
-export const deleteUser = (req: Request, res: Response) => {
+const deleteUser = (req: Request, res: Response) => {
   const id = req.params.id;
   const user = getUserById(id);
   if (user != undefined) {
@@ -105,3 +99,5 @@ export const deleteUser = (req: Request, res: Response) => {
 
 const getUserById = (id: string) =>
   users.find(user => user.isDeleted == false && user.id == id);
+
+export default { findAllUsers, findUser, createUser, updateUser, deleteUser };

@@ -1,7 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
+import validator from "./middlewares/userValidator";
+import userSchema from "./schemas/userSchema";
 
-import * as userController from "./controllers/user";
+import userController from "./controllers/user";
 
 // Create Express server
 const app = express();
@@ -16,8 +18,8 @@ app.set("port", process.env.PORT || 3000);
 
 app.get("/users/", userController.findAllUsers);
 app.get("/users/:id", userController.findUser);
-app.post("/users/", userController.createUser);
-app.put("/users/:id", userController.updateUser);
+app.post("/users/", validator(userSchema), userController.createUser);
+app.put("/users/:id", validator(userSchema), userController.updateUser);
 app.delete("/users/:id", userController.deleteUser);
 
 export default app;
