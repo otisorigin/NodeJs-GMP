@@ -1,13 +1,13 @@
 [
     {
         "id": "1",
-        "login": "login1",
+        "login": "ivan_petrov",
         "password": "password1",
         "age": 1
     },
     {
         "id": "2",
-        "login": "login2",
+        "login": "dark_user",
         "password": "password2",
         "age": 2
     },
@@ -19,13 +19,13 @@
     },
     {
         "id": "4",
-        "login": "login4",
+        "login": "user4",
         "password": "password4",
         "age": 4
     },
     {
         "id": "5",
-        "login": "login5",
+        "login": "admin",
         "password": "password5",
         "age": 5
     }

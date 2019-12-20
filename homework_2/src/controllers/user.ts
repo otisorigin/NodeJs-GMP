@@ -41,7 +41,7 @@ const findUser = (req: Request, res: Response) => {
   if (user != undefined) {
     res.send(user);
   } else {
-    res.status(204);
+    res.sendStatus(204);
   }
 };
 
@@ -53,12 +53,13 @@ const updateUser = (req: Request, res: Response) => {
   const id = req.params.id;
   const user = getUserById(id);
   if (user == undefined) {
-    res.status(204);
+    res.sendStatus(204);
+  } else{
+    user.age = req.body.age;
+    user.login = req.body.login;
+    user.password = req.body.password;
+    res.sendStatus(200);
   }
-  user.age = req.body.age;
-  user.login = req.body.login;
-  user.password = req.body.password;
-  res.sendStatus(200);
 };
 
 /**
@@ -91,7 +92,7 @@ const deleteUser = (req: Request, res: Response) => {
     user.isDeleted = true;
     res.sendStatus(200);
   } else {
-    res.status(204);
+    res.sendStatus(204);
   }
 };
 
