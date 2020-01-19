@@ -1,5 +1,6 @@
 import express from "express";
 import runLoaders from "./loaders/index";
+import controllers from "./api/controllers";
 
 const app = express();
 
@@ -13,5 +14,7 @@ app.listen(app.get("port"), () => {
   );
   console.log("  Press CTRL-C to stop!\n");
 });
+
+app.use("/api", controllers);
 
 export default app;

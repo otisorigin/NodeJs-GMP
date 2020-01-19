@@ -1,11 +1,16 @@
-import User from "../models/User";
-import { Request, Response } from "express";
+import User from "../../models/User";
+import { Router, Request, Response } from "express";
+import validator from "../middlewares/requestValidator";
+import userSchema from "../schemas/userSchema";
+
+const route = Router();
 
 /**
  * GET /users/
  * Get all users. In body parameters subLogin and limit.
  */
-// const findAllUsers = (req: Request, res: Response) => {
+const findAllUsers = (req: Request, res: Response) => {
+    console.log("findAllUsers");
 //   let availableUsers = users
 //     .filter(user => user.isDeleted == false)
 //     .sort((a, b) => (a.login > b.login ? 1 : -1));
@@ -24,13 +29,14 @@ import { Request, Response } from "express";
 //   } else {
 //     res.send(availableUsers);
 //   }
-// };
+};
 
-// /**
-//  * GET /users/id
-//  * Get user by id.
-//  */
-// const findUser = (req: Request, res: Response) => {
+/**
+ * GET /users/id
+ * Get user by id.
+ */
+const findUser = (req: Request, res: Response) => {
+    console.log("findUser");
 //   const id = req.params.id;
 //   let user = getUserById(id);
 //   if (user != undefined) {
@@ -38,13 +44,14 @@ import { Request, Response } from "express";
 //   } else {
 //     res.sendStatus(204);
 //   }
-// };
+};
 
-// /**
-//  * PUT /users/id
-//  * Update user by id.
-//  */
-// const updateUser = (req: Request, res: Response) => {
+/**
+ * PUT /users/id
+ * Update user by id.
+ */
+const updateUser = (req: Request, res: Response) => {
+    console.log("updateUser");
 //   const id = req.params.id;
 //   const user = getUserById(id);
 //   if (user == undefined) {
@@ -55,13 +62,14 @@ import { Request, Response } from "express";
 //     user.password = req.body.password;
 //     res.sendStatus(200);
 //   }
-// };
+};
 
-// /**
-//  * POST /users
-//  * Create new user.
-//  */
-// const createUser = (req: Request, res: Response) => {
+/**
+ * POST /users
+ * Create new user.
+ */
+const createUser = (req: Request, res: Response) => {
+    console.log("createUser");
 //   let id = req.body.id;
 //   if (getUserById(id) != undefined) {
 //     res.status(400).send({
@@ -74,13 +82,14 @@ import { Request, Response } from "express";
 //       message: "User created."
 //     });
 //   }
-// };
+};
 
-// /**
-//  * DELETE /users/id
-//  * Remove user by id.
-//  */
-// const deleteUser = (req: Request, res: Response) => {
+/**
+ * DELETE /users/id
+ * Remove user by id.
+ */
+const deleteUser = (req: Request, res: Response) => {
+    console.log("deleteUser");
 //   const id = req.params.id;
 //   const user = getUserById(id);
 //   if (user != undefined) {
@@ -89,9 +98,15 @@ import { Request, Response } from "express";
 //   } else {
 //     res.sendStatus(204);
 //   }
-// };
+};
 
 // const getUserById = (id: string) =>
 //   users.find(user => user.isDeleted == false && user.id == id);
 
-// export default { findAllUsers, findUser, createUser, updateUser, deleteUser };
+route.get("/", findAllUsers);
+route.get("/:id", findUser);
+route.post("/", validator(userSchema), createUser);
+route.put("/:id", validator(userSchema), updateUser);
+route.delete("/:id", deleteUser);
+
+export default route;
