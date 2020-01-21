@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import UserModel from "../models/User";
 
+//TODO вынести в config
 const sequelizeLoader = () => {
   const sequelize = new Sequelize(
     "d6qo402ikvqkmd",
@@ -34,8 +35,8 @@ const sequelizeLoader = () => {
     )
     .catch(error => console.error("Unable to connect to the database:", error));
 
-  let models = [ UserModel ]
-  models.forEach(model => model.initialize(sequelize))
+  let models = [ UserModel ];
+  models.forEach(model => model.initialize(sequelize));
 
   sequelize
     .sync()
