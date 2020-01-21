@@ -102,8 +102,11 @@ const deleteUser = (req: Request, res: Response) => {
 
 // const getUserById = (id: string) =>
 //   users.find(user => user.isDeleted == false && user.id == id);
+const users = () => User.findAll({raw:true}).then(users=>{
+    console.log(users);
+  }).catch(err=>console.log(err));
 
-route.get("/", findAllUsers);
+route.get("/", users);
 route.get("/:id", findUser);
 route.post("/", validator(userSchema), createUser);
 route.put("/:id", validator(userSchema), updateUser);
