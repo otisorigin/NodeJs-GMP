@@ -10,7 +10,7 @@ WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
-
+sequelize init
 ALTER TABLE public.users
     OWNER to tyyxlqklfoagud;
 
