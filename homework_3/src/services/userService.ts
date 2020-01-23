@@ -1,4 +1,4 @@
-import repository from "../data-access/UserRepository";
+import repository from "../data-access/userRepository";
 import User from "../models/User";
 
 const findAllUsers = () => repository.findAllUsers();
