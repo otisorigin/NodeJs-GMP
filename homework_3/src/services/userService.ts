@@ -1,17 +1,9 @@
 import repository from "../data-access/userRepository";
 import User from "../models/User";
-import ServiceError from "../util/ServiceError";
 
 const findAllUsers = () => repository.findAllUsers();
 
-const findUserById = (userId: number): Promise<User> => {
-    return repository.findUserById(userId).then(user => {
-        if(user == null) {
-            throw new ServiceError("Can't find user");
-        }
-        return user;
-    });
-};
+const findUserById = (userId: number) => repository.findUserById(userId);
 
 const removeUser = (userId: number) => repository.removeUser(userId);
 

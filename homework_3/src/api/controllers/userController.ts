@@ -1,9 +1,8 @@
 import User from "../../models/User";
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import validator from "../middlewares/requestValidator";
 import userSchema from "../schemas/userSchema";
-
-//import rep from "../../data-access/userRepository";
+import HttpException from "../../util/HttpException";
 import service from "../../services/userService";
 
 const route = Router();
@@ -38,15 +37,19 @@ const findAllUsers = (req: Request, res: Response) => {
  * GET /users/id
  * Get user by id.
  */
-const findUser = (req: Request, res: Response) => {
-  console.log("findUser");
-  //   const id = req.params.id;
-  //   let user = getUserById(id);
-  //   if (user != undefined) {
-  //     res.send(user);
-  //   } else {
-  //     res.sendStatus(204);
-  //   }
+const findUser = (req: Request, res: Response, next: NextFunction) => {
+  service
+    .findUserById(Number(req.params.id))
+    .then(user => {
+      if (user != null) {
+        res.send(user);
+      } else {
+        next(new HttpException("User not found", 204));
+      }
+    })
+    .catch(err => {
+      next(new HttpException(err.message));
+    });
 };
 
 /**
@@ -54,17 +57,16 @@ const findUser = (req: Request, res: Response) => {
  * Update user by id.
  */
 const updateUser = (req: Request, res: Response) => {
-  console.log("updateUser");
-  //   const id = req.params.id;
-  //   const user = getUserById(id);
-  //   if (user == undefined) {
-  //     res.sendStatus(204);
-  //   } else{
-  //     user.age = req.body.age;
-  //     user.login = req.body.login;
-  //     user.password = req.body.password;
-  //     res.sendStatus(200);
-  //   }
+  // const id = Number(req.params.id);
+  // const user = service.updateUser(id);
+  // if (user == undefined) {
+  //   res.sendStatus(204);
+  // } else{
+  //   user.age = req.body.age;
+  //   user.login = req.body.login;
+  //   user.password = req.body.password;
+  //   res.sendStatus(200);
+  // }
 };
 
 /**
@@ -91,29 +93,23 @@ const createUser = (req: Request, res: Response) => {
  * DELETE /users/id
  * Remove user by id.
  */
-const deleteUser = (req: Request, res: Response) => {
-  console.log("deleteUser");
-  //   const id = req.params.id;
-  //   const user = getUserById(id);
-  //   if (user != undefined) {
-  //     user.isDeleted = true;
-  //     res.sendStatus(200);
-  //   } else {
-  //     res.sendStatus(204);
-  //   }
-};
-
-// const getUserById = (id: string) =>
-//   users.find(user => user.isDeleted == false && user.id == id);
-const findUserTest = (req: Request) => {
+const deleteUser = (req: Request, res: Response, next: NextFunction) => {
+  const id = Number(req.params.id);
+  service.findUserById(id).then(user => {
+    if (user == null) {
+      next(new HttpException("User not found", 204));
+    }
+  });
   service
-    .findUserById(Number(req.params.id))
-    .then(user => console.log(user))
-    .catch(err => console.log(err));
+    .removeUser(id)
+    .then(() => res.sendStatus(200))
+    .catch(err => {
+      next(new HttpException(err.message));
+    });
 };
 
 route.get("/", findAllUsers);
-route.get("/:id" /*findUser*/, findUserTest);
+route.get("/:id", findUser);
 route.post("/", validator(userSchema), createUser);
 route.put("/:id", validator(userSchema), updateUser);
 route.delete("/:id", deleteUser);

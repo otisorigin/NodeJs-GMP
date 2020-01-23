@@ -1,8 +1,9 @@
 import Joi from "joi";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
+//TODO тоже отправлять HttpException
 const validator = (schema: any) => {
-  return (req: Request, res: Response, next: any) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     const { error } = Joi.validate(req.body, schema);
     const valid = error == null;
     if (valid) {

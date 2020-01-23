@@ -1,40 +1,22 @@
 import User from "../models/User";
-import SequelizeError from "../util/DataAccessError";
 
 const findAllUsers = () =>
-  User.findAll({ raw: true }).catch(err => console.log(err));
+  User.findAll({ raw: true });
 
-const findUserById = (userId: number) =>
-  User.findByPk(userId).catch(err => {
-    console.log(err);
-    throw new SequelizeError(err);
-  });
+const findUserById = (userId: number) => User.findByPk(userId);
 
-const removeUser = (userId: number) =>
-  User.destroy({ where: { id: userId } }).catch(err => {
-    console.log(err);
-    throw new SequelizeError(err);
-  });
+const removeUser = (userId: number) => User.destroy({ where: { id: userId } });
 
 const updateUser = (newUser: User) =>
-  User.findByPk(newUser.id)
-    .then(user => {
-      user.update({
-        login: newUser.login,
-        password: newUser.password,
-        age: newUser.age
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      throw new SequelizeError(err);
+  User.findByPk(newUser.id).then(user => {
+    user.update({
+      login: newUser.login,
+      password: newUser.password,
+      age: newUser.age
     });
-
-const createUser = (newUser: User) =>
-  User.create(newUser).catch(err => {
-    console.log(err);
-    throw new SequelizeError(err);
   });
+
+const createUser = (newUser: User) => User.create(newUser);
 
 export default {
   findAllUsers,
