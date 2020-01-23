@@ -1,7 +1,6 @@
 import repository from "../data-access/userRepository";
 import User from "../models/User";
 import ServiceError from "../util/ServiceError";
-import Sequelize from "sequelize";
 
 const findAllUsers = () => repository.findAllUsers();
 
@@ -10,6 +9,7 @@ const findUserById = (userId: number): Promise<User> => {
         if(user == null) {
             throw new ServiceError("Can't find user");
         }
+        return user;
     });
 };
 

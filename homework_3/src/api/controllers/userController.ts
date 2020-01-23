@@ -106,15 +106,15 @@ const deleteUser = (req: Request, res: Response) => {
 // const getUserById = (id: string) =>
 //   users.find(user => user.isDeleted == false && user.id == id);
 const findUserTest = async (req: Request) => {
-  // try {
-  //   service
-  //     .findUserById(Number(req.params.id))
-  //     .then(user => console.log(user))
-  //     .catch(err => console.log(err));
-  //   //console.log("User: ", user);
-  // } catch (err) {
-  //   console.log(err);
-  // }
+  try {
+    service
+      .findUserById(Number(req.params.id))
+      .then(user => console.log(user))
+      .catch(err => console.log(err));
+    //console.log("User: ", user);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 route.get("/", findAllUsers);

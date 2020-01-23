@@ -3,7 +3,7 @@ import runLoaders from "./loaders/index";
 import controllers from "./api/controllers";
 
 const app = express();
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 3001);
 
 runLoaders(app);
 
