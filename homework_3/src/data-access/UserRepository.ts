@@ -1,4 +1,5 @@
 import User from "../models/User";
+import SequelizeError from "../util/DataAccessError";
 
 const findAllUsers = () =>
   User.findAll({ raw: true }).catch(err => console.log(err));
