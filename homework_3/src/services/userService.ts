@@ -4,7 +4,8 @@ import UserDTO from "../util/dto/userDTO";
 const findAllUsers = () =>
   repository
     .findAllUsers()
-    .then(users => sortUsers(users.map(user => user as UserDTO)));
+    .then(users => users.map(user => user as UserDTO))
+    .then(users => sortUsers(users));
 
 const findAllUsersWithParameters = (
   userLimit: number,
@@ -12,7 +13,8 @@ const findAllUsersWithParameters = (
 ) =>
   repository
     .findAllUsersWithParameters(userLimit, loginSubstring)
-    .then(users => sortUsers(users.map(user => user as UserDTO)));
+    .then(users => users.map(user => user as UserDTO))
+    .then(users => sortUsers(users));
 
 const findUserById = (userId: number) =>
   repository.findUserById(userId).then(user => user as UserDTO);
