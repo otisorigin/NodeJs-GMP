@@ -3,7 +3,7 @@ import validator from "../middlewares/requestValidator";
 import userSchema from "../../util/schemas/userSchema";
 import HttpException from "../../util/exceptions/HttpException";
 import service from "../../services/userService";
-import User from "../../models/User";
+import UserDTO from "../../util/dto/userDTO";
 
 const route = Router();
 
@@ -50,37 +50,36 @@ const findUser = (req: Request, res: Response, next: NextFunction) => {
  * PUT /users/id
  * Update user by id.
  */
-const updateUser = (req: Request, res: Response) => {
-  // const id = Number(req.params.id);
-  // const user = service.updateUser(id);
-  // if (user == undefined) {
-  //   res.sendStatus(204);
-  // } else{
-  //   user.age = req.body.age;
-  //   user.login = req.body.login;
-  //   user.password = req.body.password;
-  //   res.sendStatus(200);
-  // }
+const updateUser = (req: Request, res: Response, next: NextFunction) => {
+  let userDTO = req.body as UserDTO;
+  if (isUserExists(userDTO.id, next)) {
+    service
+      .updateUser(userDTO)
+      .then(() => res.sendStatus(200))
+      .catch(err => {
+        next(new HttpException(err.message));
+      });
+  }
 };
 
 /**
  * POST /users
  * Create new user.
  */
-const createUser = (req: Request, res: Response) => {
-  console.log("createUser");
-  //   let id = req.body.id;
-  //   if (getUserById(id) != undefined) {
-  //     res.status(400).send({
-  //       error: "User with such id already exists!"
-  //     });
-  //   } else {
-  //     const user = new User(id, req.body.login, req.body.password, req.body.age);
-  //     users.push(user);
-  //     res.status(201).send({
-  //       message: "User created."
-  //     });
-  //   }
+const createUser = (req: Request, res: Response, next: NextFunction) => {
+  let userDTO = req.body as UserDTO;
+  if (isUserExists(userDTO.id, next)) {
+    service
+      .createUser(userDTO)
+      .then(() =>
+        res.status(201).send({
+          message: "User created."
+        })
+      )
+      .catch(err => {
+        next(new HttpException(err.message));
+      });
+  }
 };
 
 /**
@@ -89,31 +88,38 @@ const createUser = (req: Request, res: Response) => {
  */
 const deleteUser = (req: Request, res: Response, next: NextFunction) => {
   const id = Number(req.params.id);
-  service
-    .findUserById(id)
-    .then(user => {
-      if (user == null) {
-        next(new HttpException("User not found", 204));
-      }
-    })
-    .catch(err => {
-      next(new HttpException(err.message));
-    });
-  service
-    .removeUser(id)
-    .then(() => res.sendStatus(200))
-    .catch(err => {
-      next(new HttpException(err.message));
-    });
+  if (isUserExists(id, next)) {
+    service
+      .removeUser(id)
+      .then(() => res.sendStatus(200))
+      .catch(err => {
+        next(new HttpException(err.message));
+      });
+  }
 };
 
-const sendUsers = (users: User[], res: Response, next: NextFunction) => {
+const sendUsers = (users: UserDTO[], res: Response, next: NextFunction) => {
   if (users.length != 0) {
     res.send(users);
   } else {
     next(new HttpException("Users not found", 204));
   }
-}
+};
+
+const isUserExists = (id: number, next: NextFunction) => {
+  service
+    .findUserById(id)
+    .then(user => {
+      if (user == null) {
+        next(new HttpException("User not found", 204));
+        return false;
+      }
+    })
+    .catch(err => {
+      next(new HttpException(err.message));
+    });
+  return true;
+};
 
 route.get("/", findAllUsers);
 route.get("/:id", findUser);

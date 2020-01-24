@@ -1,8 +1,10 @@
 import repository from "../data-access/userRepository";
-import User from "../models/User";
+import UserDTO from "../util/dto/userDTO";
 
 const findAllUsers = () =>
-  repository.findAllUsers().then(users => sortUsers(users));
+  repository
+    .findAllUsers()
+    .then(users => sortUsers(users.map(user => user as UserDTO)));
 
 const findAllUsersWithParameters = (
   userLimit: number,
@@ -10,18 +12,19 @@ const findAllUsersWithParameters = (
 ) =>
   repository
     .findAllUsersWithParameters(userLimit, loginSubstring)
-    .then(users => sortUsers(users));
+    .then(users => sortUsers(users.map(user => user as UserDTO)));
 
-const findUserById = (userId: number) => repository.findUserById(userId);
+const findUserById = (userId: number) =>
+  repository.findUserById(userId).then(user => user as UserDTO);
 
 const removeUser = (userId: number) => repository.removeUser(userId);
 
-const updateUser = (newUser: User) => repository.updateUser(newUser);
+const updateUser = (newUser: UserDTO) => repository.updateUser(newUser);
 
-const createUser = (newUser: User) => repository.createUser(newUser);
+const createUser = (newUser: UserDTO) => repository.createUser(newUser);
 
-const sortUsers = (users: User[]) => {
-  return users.sort((a: User, b: User) => (a.login > b.login ? 1 : -1));
+const sortUsers = (users: UserDTO[]) => {
+  return users.sort((a: UserDTO, b: UserDTO) => (a.login > b.login ? 1 : -1));
 };
 
 export default {
