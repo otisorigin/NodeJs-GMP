@@ -1,8 +1,8 @@
 import User from "../../models/User";
 import { Router, Request, Response, NextFunction } from "express";
 import validator from "../middlewares/requestValidator";
-import userSchema from "../schemas/userSchema";
-import HttpException from "../../util/HttpException";
+import userSchema from "../../util/schemas/userSchema";
+import HttpException from "../../util/exceptions/HttpException";
 import service from "../../services/userService";
 
 const route = Router();
@@ -99,6 +99,8 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
     if (user == null) {
       next(new HttpException("User not found", 204));
     }
+  }).catch(err => {
+    next(new HttpException(err.message));
   });
   service
     .removeUser(id)
