@@ -1,9 +1,9 @@
-import User from "../../models/User";
 import { Router, Request, Response, NextFunction } from "express";
 import validator from "../middlewares/requestValidator";
 import userSchema from "../../util/schemas/userSchema";
 import HttpException from "../../util/exceptions/HttpException";
 import service from "../../services/userService";
+import User from "../../models/User";
 
 const route = Router();
 
@@ -11,26 +11,20 @@ const route = Router();
  * GET /users/
  * Get all users. In body parameters subLogin and limit.
  */
-const findAllUsers = (req: Request, res: Response) => {
-  console.log("findAllUsers");
-  //   let availableUsers = users
-  //     .filter(user => user.isDeleted == false)
-  //     .sort((a, b) => (a.login > b.login ? 1 : -1));
-  //   let loginSubstring = req.body.loginSubstring;
-  //   let limit = req.body.limit;
-  //   if (
-  //     availableUsers.length > 0 &&
-  //     loginSubstring != undefined &&
-  //     limit != undefined
-  //   ) {
-  //     res.send(
-  //       availableUsers
-  //         .filter(user => user.login.includes(loginSubstring))
-  //         .slice(0, limit)
-  //     );
-  //   } else {
-  //     res.send(availableUsers);
-  //   }
+const findAllUsers = (req: Request, res: Response, next: NextFunction) => {
+  const loginSubstring = req.body.loginSubstring;
+  const limit = req.body.limit;
+  if (loginSubstring != undefined && limit != undefined) {
+    service
+      .findAllUsersWithParameters(limit, loginSubstring)
+      .then(users => sendUsers(users, res, next))
+      .catch(err => next(new HttpException(err.message)));
+  } else {
+    service
+      .findAllUsers()
+      .then(users => sendUsers(users, res, next))
+      .catch(err => next(new HttpException(err.message)));
+  }
 };
 
 /**
@@ -95,13 +89,16 @@ const createUser = (req: Request, res: Response) => {
  */
 const deleteUser = (req: Request, res: Response, next: NextFunction) => {
   const id = Number(req.params.id);
-  service.findUserById(id).then(user => {
-    if (user == null) {
-      next(new HttpException("User not found", 204));
-    }
-  }).catch(err => {
-    next(new HttpException(err.message));
-  });
+  service
+    .findUserById(id)
+    .then(user => {
+      if (user == null) {
+        next(new HttpException("User not found", 204));
+      }
+    })
+    .catch(err => {
+      next(new HttpException(err.message));
+    });
   service
     .removeUser(id)
     .then(() => res.sendStatus(200))
@@ -109,6 +106,14 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
       next(new HttpException(err.message));
     });
 };
+
+const sendUsers = (users: User[], res: Response, next: NextFunction) => {
+  if (users.length != 0) {
+    res.send(users);
+  } else {
+    next(new HttpException("Users not found", 204));
+  }
+}
 
 route.get("/", findAllUsers);
 route.get("/:id", findUser);
