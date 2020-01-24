@@ -35,7 +35,7 @@ const findUser = (req: Request, res: Response, next: NextFunction) => {
   service
     .findUserById(Number(req.params.id))
     .then(user => {
-      if (user != null) {
+      if (!user) {
         res.send(user);
       } else {
         next(new HttpException("User not found", 204));
@@ -110,7 +110,7 @@ const isUserExists = (id: number, next: NextFunction) => {
   service
     .findUserById(id)
     .then(user => {
-      if (user == null) {
+      if (!user) {
         next(new HttpException("User not found", 204));
         return false;
       }
