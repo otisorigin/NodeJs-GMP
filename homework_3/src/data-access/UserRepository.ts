@@ -34,6 +34,6 @@ export default {
   findAllUsersWithParameters,
   findUserById,
   removeUser,
-  updateUser,
-  createUser
+  createUser,
+  updateUser
 };

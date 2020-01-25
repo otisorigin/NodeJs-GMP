@@ -52,7 +52,7 @@ const findUser = (req: Request, res: Response, next: NextFunction) => {
  */
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   let userDTO = req.body as UserDTO;
-  const userExists = await service.isUserExists(userDTO.id);
+  const userExists = await service.checkUserExists(userDTO.id);
   if (userExists) {
     service
       .updateUser(userDTO)
@@ -71,7 +71,7 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
  */
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   let userDTO = req.body as UserDTO;
-  const userExists = await service.isUserExists(userDTO.id);
+  const userExists = await service.checkUserExists(userDTO.id);
   if (!userExists) {
     service
       .createUser(userDTO)
@@ -94,7 +94,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
  */
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const id = Number(req.params.id);
-  const userExists = await service.isUserExists(id);
+  const userExists = await service.checkUserExists(id);
   if (userExists) {
     service
       .removeUser(id)
