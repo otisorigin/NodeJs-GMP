@@ -50,15 +50,18 @@ const findUser = (req: Request, res: Response, next: NextFunction) => {
  * PUT /users/id
  * Update user by id.
  */
-const updateUser = (req: Request, res: Response, next: NextFunction) => {
+const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   let userDTO = req.body as UserDTO;
-  if (isUserExists(userDTO.id, next)) {
+  const userExists = await service.isUserExists(userDTO.id);
+  if (userExists) {
     service
       .updateUser(userDTO)
       .then(() => res.sendStatus(200))
       .catch(err => {
         next(new HttpException(err.message));
       });
+  } else {
+    next(new HttpException("Can't find user with such id", 400));
   }
 };
 
@@ -66,9 +69,10 @@ const updateUser = (req: Request, res: Response, next: NextFunction) => {
  * POST /users
  * Create new user.
  */
-const createUser = (req: Request, res: Response, next: NextFunction) => {
+const createUser = async (req: Request, res: Response, next: NextFunction) => {
   let userDTO = req.body as UserDTO;
-  if (isUserExists(userDTO.id, next)) {
+  const userExists = await service.isUserExists(userDTO.id);
+  if (!userExists) {
     service
       .createUser(userDTO)
       .then(() =>
@@ -79,6 +83,8 @@ const createUser = (req: Request, res: Response, next: NextFunction) => {
       .catch(err => {
         next(new HttpException(err.message));
       });
+  } else {
+    next(new HttpException("User with such id already exists", 400));
   }
 };
 
@@ -86,15 +92,18 @@ const createUser = (req: Request, res: Response, next: NextFunction) => {
  * DELETE /users/id
  * Remove user by id.
  */
-const deleteUser = (req: Request, res: Response, next: NextFunction) => {
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const id = Number(req.params.id);
-  if (isUserExists(id, next)) {
+  const userExists = await service.isUserExists(id);
+  if (userExists) {
     service
       .removeUser(id)
       .then(() => res.sendStatus(200))
       .catch(err => {
         next(new HttpException(err.message));
       });
+  } else {
+    next(new HttpException("Can't find user with such id", 400));
   }
 };
 
@@ -104,21 +113,6 @@ const sendUsers = (users: UserDTO[], res: Response, next: NextFunction) => {
   } else {
     next(new HttpException("Users not found", 204));
   }
-};
-
-const isUserExists = (id: number, next: NextFunction) => {
-  service
-    .findUserById(id)
-    .then(user => {
-      if (!user) {
-        next(new HttpException("User not found", 204));
-        return false;
-      }
-    })
-    .catch(err => {
-      next(new HttpException(err.message));
-    });
-  return true;
 };
 
 route.get("/", findAllUsers);

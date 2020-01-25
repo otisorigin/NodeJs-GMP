@@ -29,11 +29,18 @@ const sortUsers = (users: UserDTO[]) => {
   return users.sort((a: UserDTO, b: UserDTO) => (a.login > b.login ? 1 : -1));
 };
 
+const isUserExists = async (id: number) => {
+  return findUserById(id).then(user => {
+    return user ? true : false;
+  });
+};
+
 export default {
   findAllUsers,
   findAllUsersWithParameters,
   findUserById,
   removeUser,
   updateUser,
-  createUser
+  createUser,
+  isUserExists
 };
