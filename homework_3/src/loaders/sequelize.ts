@@ -1,8 +1,6 @@
 import { Sequelize } from "sequelize";
 import UserModel from "../models/User";
 
-//TODO вынести в config
-//TODO при запуске в бд грузить юзеров
 const sequelizeLoader = () => {
   const sequelize = new Sequelize(
     "d6qo402ikvqkmd",
