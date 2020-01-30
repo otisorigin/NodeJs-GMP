@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import UserModel from "../models/User";
+import GroupsModel from "../models/Group";
 
 const sequelizeLoader = () => {
   const sequelize = new Sequelize(
@@ -34,7 +35,7 @@ const sequelizeLoader = () => {
     )
     .catch(error => console.error("Unable to connect to the database:", error));
 
-  let models = [ UserModel ];
+  let models = [ UserModel, GroupsModel ];
   models.forEach(model => model.initialize(sequelize));
 
   sequelize
