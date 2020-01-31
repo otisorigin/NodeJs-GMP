@@ -1,6 +1,7 @@
-import { Sequelize } from "sequelize";
+import { Sequelize, Model } from "sequelize";
 import UserModel from "../models/User";
 import GroupsModel from "../models/Group";
+import UserToGroupModel from "../models/UserToGroup";
 
 const sequelizeLoader = () => {
   const sequelize = new Sequelize(
@@ -22,7 +23,7 @@ const sequelizeLoader = () => {
       },
       define: {
         timestamps: false
-      },
+      }
     }
   );
 
@@ -35,8 +36,11 @@ const sequelizeLoader = () => {
     )
     .catch(error => console.error("Unable to connect to the database:", error));
 
-  let models = [ UserModel, GroupsModel ];
+  let models = [UserModel, GroupsModel, UserToGroupModel];
   models.forEach(model => model.initialize(sequelize));
+
+  UserModel.belongsToMany(GroupsModel, { through: UserToGroupModel });
+  GroupsModel.belongsToMany(UserModel, { through: UserToGroupModel });
 
   sequelize
     .sync()

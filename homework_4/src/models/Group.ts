@@ -1,9 +1,9 @@
 import { Sequelize, Model, DataTypes, ENUM } from "sequelize";
 
 class Group extends Model {
-  // public id!: number;
-  // public name!: string;
-  // public permissions!: Array<Permission>;
+  public id!: number;
+  public name!: string;
+  public permissions!: string;
 
   public static initialize(sequelize: Sequelize) {
     this.init(
