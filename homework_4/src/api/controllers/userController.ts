@@ -35,10 +35,10 @@ const findUser = (req: Request, res: Response, next: NextFunction) => {
   service
     .findUserById(Number(req.params.id))
     .then(user => {
-      if (!user) {
+      if (user) {
         res.send(user);
       } else {
-        next(new HttpException("User not found", 204));
+        next(new HttpException("User not found", 404));
       }
     })
     .catch(err => {
@@ -111,7 +111,7 @@ const sendUsers = (users: UserDTO[], res: Response, next: NextFunction) => {
   if (users.length != 0) {
     res.send(users);
   } else {
-    next(new HttpException("Users not found", 204));
+    next(new HttpException("Users not found", 404));
   }
 };
 
