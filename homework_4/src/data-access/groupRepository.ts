@@ -1,5 +1,9 @@
 import Group from "../models/Group";
 import GroupDTO from "../util/dto/GroupDTO";
+import User from "../models/User";
+import UserGroup from "../models/UserGroup";
+
+
 
 const findAllGroups = () => Group.findAll({ raw: true });
 
@@ -16,6 +20,9 @@ const updateGroup = (updatedGroup: GroupDTO) =>
 const createGroup = (newGroup: GroupDTO) => Group.create(newGroup);
 
 const addUsersToGroup = (groupId: number, userIds: number[]) => {
+  Group.findByPk(groupId).then(group => {
+    group.addUsers(userIds);
+  });
   //Group.addUser( {id: userIds[0]});
   // Group.addUser(user, { through: { status: 'started' }})
 }
@@ -25,5 +32,6 @@ export default {
   findGroupById,
   removeGroup,
   createGroup,
-  updateGroup
+  updateGroup,
+  addUsersToGroup
 };

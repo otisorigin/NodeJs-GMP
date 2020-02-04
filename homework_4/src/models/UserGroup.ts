@@ -4,11 +4,6 @@ class UserGroup extends Model {
   public static initialize(sequelize: Sequelize) {
     this.init(
       {
-        id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
-          primaryKey: true
-        },
         group_id: {
           type: DataTypes.INTEGER,
           primaryKey: false,

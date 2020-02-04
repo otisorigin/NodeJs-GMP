@@ -1,9 +1,14 @@
 import { Sequelize, Model, DataTypes, ENUM } from "sequelize";
+import { BelongsToCreateAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyAddAssociationMixin } from 'sequelize';
+import User from "./User";
 
 class Group extends Model {
   public id!: number;
   public name!: string;
   public permissions!: string[];
+
+  public getUsers!: BelongsToManyGetAssociationsMixin<User>;
+  public addUsers!: BelongsToManyAddAssociationMixin<User, number[]>;
 
   public static initialize(sequelize: Sequelize) {
     this.init(

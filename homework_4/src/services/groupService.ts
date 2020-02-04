@@ -23,7 +23,7 @@ const checkGroupExists = async (id: number) => {
 };
 
 const addUsersToGroup = (groupId: number, userIds: number[]) => {
-  
+  repository.addUsersToGroup(groupId, userIds);
 }
 
 export default {

@@ -1,7 +1,7 @@
 import { Sequelize, Model } from "sequelize";
 import User from "../models/User";
 import Group from "../models/Group";
-//import UserGroup from "../models/UserGroup11";
+import UserGroup from "../models/UserGroup";
 
 const sequelizeLoader = () => {
   const sequelize = new Sequelize(
@@ -36,11 +36,16 @@ const sequelizeLoader = () => {
     )
     .catch(error => console.error("Unable to connect to the database:", error));
 
-  let models = [User, Group];
+  let models = [User, Group, UserGroup];
   models.forEach(model => model.initialize(sequelize));
 
-  User.belongsToMany(Group, { as: 'Groups', through: 'user_group', foreignKey: 'userId' });
-  Group.belongsToMany(User, { as: 'Users', through: 'user_group', foreignKey: 'groupId' });
+  User.belongsToMany(Group, { as: 'Groups', through: UserGroup, foreignKey: 'user_id' });
+  Group.belongsToMany(User, { as: 'Users', through: UserGroup, foreignKey: 'group_id' });
+
+  UserGroup.belongsTo(User, { foreignKey: 'user_id', targetKey: 'id', as: 'User' });
+  UserGroup.belongsTo(Group, { foreignKey: 'group_id', targetKey: 'id', as: 'Group' });
+
+  
 
   sequelize
     .sync()
