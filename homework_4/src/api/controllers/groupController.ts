@@ -96,13 +96,17 @@ const deleteGroup = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const addUsersToGroup = (req: Request, res: Response, next: NextFunction) => {
+  const groupId = Number(req.params.id);
+  const userIds = req.body.users as number[];
+  service.addUsersToGroup(groupId, userIds)
+}
+
 const sendGroups = (groups: GroupDTO[], res: Response, next: NextFunction) => {
   console.log(groups);
   if (groups.length != 0) {
-    console.log("IF")
     res.send(groups);
   } else {
-    console.log("ELSE")
     next(new HttpException("Groups not found", 404));
   }
 };
@@ -112,5 +116,6 @@ route.get("/:id", findGroup);
 route.post("/", createGroup);
 route.put("/:id", updateGroup);
 route.delete("/:id", deleteGroup);
+route.post("/:id/users/", addUsersToGroup)
 
 export default route;

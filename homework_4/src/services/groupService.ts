@@ -22,11 +22,16 @@ const checkGroupExists = async (id: number) => {
   });
 };
 
+const addUsersToGroup = (groupId: number, userIds: number[]) => {
+  
+}
+
 export default {
   findAllGroups,
   findGroupById,
   removeGroup,
   updateGroup,
   createGroup,
-  checkGroupExists
+  checkGroupExists,
+  addUsersToGroup
 };

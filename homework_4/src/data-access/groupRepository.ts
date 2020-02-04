@@ -15,6 +15,11 @@ const updateGroup = (updatedGroup: GroupDTO) =>
 
 const createGroup = (newGroup: GroupDTO) => Group.create(newGroup);
 
+const addUsersToGroup = (groupId: number, userIds: number[]) => {
+  //Group.addUser( {id: userIds[0]});
+  // Group.addUser(user, { through: { status: 'started' }})
+}
+
 export default {
   findAllGroups,
   findGroupById,
