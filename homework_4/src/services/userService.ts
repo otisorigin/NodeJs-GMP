@@ -30,6 +30,12 @@ const sortUsers = (users: UserDTO[]) => {
   return users.sort((a: UserDTO, b: UserDTO) => (a.login > b.login ? 1 : -1));
 };
 
+const findUserGroups = (userId: number) => {
+  return repository
+    .findUserGroups(userId)
+    .then(groups => Mappers.mapGroups(groups));
+};
+
 const checkUserExists = async (id: number) => {
   return findUserById(id).then(user => {
     return user ? true : false;
@@ -43,5 +49,6 @@ export default {
   removeUser,
   updateUser,
   createUser,
-  checkUserExists
+  checkUserExists,
+  findUserGroups
 };

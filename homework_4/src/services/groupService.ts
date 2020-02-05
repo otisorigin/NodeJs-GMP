@@ -22,13 +22,13 @@ const checkGroupExists = async (id: number) => {
 };
 
 const addUsersToGroup = (groupId: number, userIds: number[]) => {
-  repository.addUsersToGroup(groupId, userIds);
+  return repository.addUsersToGroup(groupId, userIds);
 };
 
-const findGroupUsers = async (groupId: number) => {
-  const users = await repository
-    .findGroupUsers(groupId);
-  return Mappers.mapUsers(users);
+const findGroupUsers = (groupId: number) => {
+  return repository
+    .findGroupUsers(groupId)
+    .then(users => Mappers.mapUsers(users));
 };
 
 export default {

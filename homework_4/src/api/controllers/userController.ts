@@ -108,18 +108,26 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-// const sendUsers = (users: UserDTO[], res: Response, next: NextFunction) => {
-//   if (users.length != 0) {
-//     res.send(users);
-//   } else {
-//     next(new HttpException("Users not found", 404));
-//   }
-// };
+const findUserGroups = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = Number(req.params.id);
+  const userExists = await service.checkUserExists(userId);
+  if (userExists) {
+    service
+      .findUserGroups(userId)
+      .then(groups => Utils.sendGroups(groups, res, next))
+      .catch(err => {
+        next(new HttpException(err.message));
+      });
+  } else {
+    next(new HttpException("Can't find user with such id", 400));
+  }
+}
 
 route.get("/", findAllUsers);
 route.get("/:id", findUser);
 route.post("/", validator(userSchema), createUser);
 route.put("/:id", validator(userSchema), updateUser);
 route.delete("/:id", deleteUser);
+route.get("/:id/groups/", findUserGroups)
 
 export default route;

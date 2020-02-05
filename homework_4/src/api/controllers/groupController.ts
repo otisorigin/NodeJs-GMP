@@ -106,18 +106,18 @@ const addUsersToGroup = async (
   const userIds = req.body.users as number[];
   const groupExists = await service.checkGroupExists(groupId);
   if (groupExists) {
-    // service
-    //   .addUsersToGroup(groupId, userIds)
-    //   .then(() => res.sendStatus(200))
-    //   .catch(err => {
-    //     next(new HttpException(err.message));
-    //   });
+    service
+      .addUsersToGroup(groupId, userIds)
+      .then(() => res.sendStatus(200))
+      .catch(err => {
+        next(new HttpException(err.message));
+      });
   } else {
     next(new HttpException("Can't find group with such id", 400));
   }
 };
 
-const getGroupUsers = async (
+const findGroupUsers = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -142,6 +142,6 @@ route.post("/", createGroup);
 route.put("/:id", updateGroup);
 route.delete("/:id", deleteGroup);
 route.post("/:id/users/", addUsersToGroup);
-route.get("/:id/users/", getGroupUsers);
+route.get("/:id/users/", findGroupUsers);
 
 export default route;

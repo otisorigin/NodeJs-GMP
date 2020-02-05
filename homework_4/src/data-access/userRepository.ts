@@ -19,13 +19,11 @@ const findUserById = (userId: number) => User.findByPk(userId);
 const removeUser = (userId: number) => User.destroy({ where: { id: userId } });
 
 const updateUser = (newUser: UserDTO) =>
-  User.findByPk(newUser.id).then(user => {
-    user.update({
-      login: newUser.login,
-      password: newUser.password,
-      age: newUser.age
-    });
-  });
+  User.findByPk(newUser.id).then(user => user.update(newUser));
+
+const findUserGroups = (userId: number) => {
+  return User.findByPk(userId).then(user => user.getGroups());
+};
 
 const createUser = (newUser: UserDTO) => User.create(newUser);
 
@@ -35,5 +33,6 @@ export default {
   findUserById,
   removeUser,
   createUser,
-  updateUser
+  updateUser,
+  findUserGroups
 };

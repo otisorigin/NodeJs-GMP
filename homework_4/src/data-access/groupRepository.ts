@@ -9,23 +9,19 @@ const removeGroup = (groupId: number) =>
   Group.destroy({ where: { id: groupId } });
 
 const updateGroup = (updatedGroup: GroupDTO) =>
-  Group.findByPk(updatedGroup.id).then(group => {
-    group.update(updatedGroup);
-  });
+  Group.findByPk(updatedGroup.id).then(group => group.update(updatedGroup));
 
 const createGroup = (newGroup: GroupDTO) => Group.create(newGroup);
 
 const addUsersToGroup = (groupId: number, userIds: number[]) => {
-  Group.findByPk(groupId).then(group => {
-    group.addUsers(userIds);
+  return Group.findByPk(groupId).then(group => {
+    return group.addUsers(userIds);
   });
-}
+};
 
 const findGroupUsers = (groupId: number) => {
-  return Group.findByPk(groupId).then(group => {
-    return group.getUsers()
-  });
-}
+  return Group.findByPk(groupId).then(group => group.getUsers());
+};
 
 export default {
   findAllGroups,

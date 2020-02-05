@@ -1,4 +1,5 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
+import { BelongsToManyGetAssociationsMixin } from "sequelize";
 import Group from "./Group";
 import UserGroup from "./UserGroup";
 
@@ -7,6 +8,8 @@ class User extends Model {
   public login!: string;
   public password!: string;
   public age!: number;
+
+  public getGroups!: BelongsToManyGetAssociationsMixin<Group>;
 
   public static initialize(sequelize: Sequelize) {
     this.init(
