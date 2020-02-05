@@ -4,6 +4,7 @@ import userSchema from "../../util/schemas/userSchema";
 import HttpException from "../../util/exceptions/HttpException";
 import service from "../../services/userService";
 import UserDTO from "../../util/dto/userDTO";
+import Utils from "../utils";
 
 const route = Router();
 
@@ -17,12 +18,12 @@ const findAllUsers = (req: Request, res: Response, next: NextFunction) => {
   if (loginSubstring != undefined && limit != undefined) {
     service
       .findAllUsersWithParameters(limit, loginSubstring)
-      .then(users => sendUsers(users, res, next))
+      .then(users => Utils.sendUsers(users, res, next))
       .catch(err => next(new HttpException(err.message)));
   } else {
     service
       .findAllUsers()
-      .then(users => sendUsers(users, res, next))
+      .then(users => Utils.sendUsers(users, res, next))
       .catch(err => next(new HttpException(err.message)));
   }
 };
@@ -107,13 +108,13 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const sendUsers = (users: UserDTO[], res: Response, next: NextFunction) => {
-  if (users.length != 0) {
-    res.send(users);
-  } else {
-    next(new HttpException("Users not found", 404));
-  }
-};
+// const sendUsers = (users: UserDTO[], res: Response, next: NextFunction) => {
+//   if (users.length != 0) {
+//     res.send(users);
+//   } else {
+//     next(new HttpException("Users not found", 404));
+//   }
+// };
 
 route.get("/", findAllUsers);
 route.get("/:id", findUser);

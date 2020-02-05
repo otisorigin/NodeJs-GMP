@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import HttpException from "../../util/exceptions/HttpException";
 import service from "../../services/groupService";
 import GroupDTO from "../../util/dto/groupDTO";
+import Utils from "../utils";
 
 const route = Router();
 
@@ -12,7 +13,7 @@ const route = Router();
 const findAllGroups = (req: Request, res: Response, next: NextFunction) => {
   service
     .findAllGroups()
-    .then(groups => sendGroups(groups, res, next))
+    .then(groups => Utils.sendGroups(groups, res, next))
     .catch(err => next(new HttpException(err.message)));
 };
 
@@ -96,26 +97,51 @@ const deleteGroup = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const addUsersToGroup = (req: Request, res: Response, next: NextFunction) => {
+const addUsersToGroup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const groupId = Number(req.params.id);
   const userIds = req.body.users as number[];
-  service.addUsersToGroup(groupId, userIds)
-}
-
-const sendGroups = (groups: GroupDTO[], res: Response, next: NextFunction) => {
-  console.log(groups);
-  if (groups.length != 0) {
-    res.send(groups);
+  const groupExists = await service.checkGroupExists(groupId);
+  if (groupExists) {
+    // service
+    //   .addUsersToGroup(groupId, userIds)
+    //   .then(() => res.sendStatus(200))
+    //   .catch(err => {
+    //     next(new HttpException(err.message));
+    //   });
   } else {
-    next(new HttpException("Groups not found", 404));
+    next(new HttpException("Can't find group with such id", 400));
   }
 };
+
+const getGroupUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const groupId = Number(req.params.id);
+  const groupExists = await service.checkGroupExists(groupId);
+  if (groupExists) {
+    service
+      .findGroupUsers(groupId)
+      .then(users => Utils.sendUsers(users, res, next))
+      .catch(err => {
+        next(new HttpException(err.message));
+      });
+  } else {
+    next(new HttpException("Can't find group with such id", 400));
+  }
+}
 
 route.get("/", findAllGroups);
 route.get("/:id", findGroup);
 route.post("/", createGroup);
 route.put("/:id", updateGroup);
 route.delete("/:id", deleteGroup);
-route.post("/:id/users/", addUsersToGroup)
+route.post("/:id/users/", addUsersToGroup);
+route.get("/:id/users/", getGroupUsers);
 
 export default route;

@@ -1,13 +1,12 @@
 import repository from "../data-access/groupRepository";
 import GroupDTO from "../util/dto/GroupDTO";
+import Mappers from "./mappers";
 
 const findAllGroups = () =>
-  repository
-    .findAllGroups()
-    .then(groups => groups.map(group => group as GroupDTO));
+  repository.findAllGroups().then(groups => Mappers.mapGroups(groups));
 
 const findGroupById = (groupId: number) =>
-  repository.findGroupById(groupId).then(group => group as GroupDTO);
+  repository.findGroupById(groupId).then(group => Mappers.mapGroup(group));
 
 const removeGroup = (userId: number) => repository.removeGroup(userId);
 
@@ -24,7 +23,13 @@ const checkGroupExists = async (id: number) => {
 
 const addUsersToGroup = (groupId: number, userIds: number[]) => {
   repository.addUsersToGroup(groupId, userIds);
-}
+};
+
+const findGroupUsers = async (groupId: number) => {
+  const users = await repository
+    .findGroupUsers(groupId);
+  return Mappers.mapUsers(users);
+};
 
 export default {
   findAllGroups,
@@ -33,5 +38,6 @@ export default {
   updateGroup,
   createGroup,
   checkGroupExists,
-  addUsersToGroup
+  addUsersToGroup,
+  findGroupUsers
 };

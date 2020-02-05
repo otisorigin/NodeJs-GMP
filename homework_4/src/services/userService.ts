@@ -1,10 +1,11 @@
 import repository from "../data-access/userRepository";
 import UserDTO from "../util/dto/userDTO";
+import Mappers from "./mappers";
 
 const findAllUsers = () =>
   repository
     .findAllUsers()
-    .then(users => users.map(user => user as UserDTO))
+    .then(users => Mappers.mapUsers(users))
     .then(users => sortUsers(users));
 
 const findAllUsersWithParameters = (
@@ -13,11 +14,11 @@ const findAllUsersWithParameters = (
 ) =>
   repository
     .findAllUsersWithParameters(userLimit, loginSubstring)
-    .then(users => users.map(user => user as UserDTO))
+    .then(users => Mappers.mapUsers(users))
     .then(users => sortUsers(users));
 
 const findUserById = (userId: number) =>
-  repository.findUserById(userId).then(user => user as UserDTO);
+  repository.findUserById(userId).then(user => Mappers.mapUser(user));
 
 const removeUser = (userId: number) => repository.removeUser(userId);
 
