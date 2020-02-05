@@ -1,6 +1,5 @@
 import { Sequelize, Model, DataTypes, ENUM } from "sequelize";
 import {
-  BelongsToCreateAssociationMixin,
   BelongsToManyGetAssociationsMixin,
   BelongsToManyAddAssociationMixin
 } from "sequelize";

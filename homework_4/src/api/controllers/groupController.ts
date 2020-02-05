@@ -97,6 +97,10 @@ const deleteGroup = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+// /**
+//  * POST /groups/id/users
+//  * Add users in group by ids.
+//  */
 const addUsersToGroup = async (
   req: Request,
   res: Response,
@@ -117,6 +121,10 @@ const addUsersToGroup = async (
   }
 };
 
+// /**
+//  * GET /groups/id/users
+//  * Find users which belongs to this group.
+//  */
 const findGroupUsers = async (
   req: Request,
   res: Response,

@@ -108,6 +108,10 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+/**
+ * GET /users/id/groups/
+ * Get groups which belongs to this user.
+ */
 const findUserGroups = async (req: Request, res: Response, next: NextFunction) => {
   const userId = Number(req.params.id);
   const userExists = await service.checkUserExists(userId);

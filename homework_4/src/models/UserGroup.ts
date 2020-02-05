@@ -3,8 +3,8 @@ import User from "./User";
 import Group from "./Group";
 
 class UserGroup extends Model {
-  public group_id!: number;
-  public user_id!: number;
+  // public group_id!: number;
+  // public user_id!: number;
 
   public static initialize(sequelize: Sequelize) {
     this.init(
@@ -38,16 +38,16 @@ class UserGroup extends Model {
   }
 
   public static associate() {
-    // this.belongsTo(User, {
-    //   foreignKey: "user_id",
-    //   targetKey: "id",
-    //   as: "User"
-    // });
-    // this.belongsTo(Group, {
-    //   foreignKey: "group_id",
-    //   targetKey: "id",
-    //   as: "Group"
-    // });
+    this.belongsTo(User, {
+      foreignKey: "user_id",
+      targetKey: "id",
+      as: "User"
+    });
+    this.belongsTo(Group, {
+      foreignKey: "group_id",
+      targetKey: "id",
+      as: "Group"
+    });
   }
 }
 

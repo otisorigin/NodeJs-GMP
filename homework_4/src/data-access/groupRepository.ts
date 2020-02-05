@@ -20,7 +20,9 @@ const addUsersToGroup = (groupId: number, userIds: number[]) => {
 };
 
 const findGroupUsers = (groupId: number) => {
-  return Group.findByPk(groupId).then(group => group.getUsers());
+  return Group.findByPk(groupId).then(group =>
+    group.getUsers()
+  );
 };
 
 export default {
