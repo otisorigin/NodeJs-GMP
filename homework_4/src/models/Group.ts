@@ -1,6 +1,11 @@
 import { Sequelize, Model, DataTypes, ENUM } from "sequelize";
-import { BelongsToCreateAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyAddAssociationMixin } from 'sequelize';
+import {
+  BelongsToCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyAddAssociationMixin
+} from "sequelize";
 import User from "./User";
+import UserGroup from "./UserGroup";
 
 class Group extends Model {
   public id!: number;
@@ -32,6 +37,14 @@ class Group extends Model {
         sequelize: sequelize
       }
     );
+  }
+
+  public static associate() {
+    this.belongsToMany(User, {
+      as: "Users",
+      through: UserGroup,
+      foreignKey: "group_id"
+    });
   }
 }
 

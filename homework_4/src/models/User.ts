@@ -1,21 +1,24 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
+import Group from "./Group";
+import UserGroup from "./UserGroup";
 
 class User extends Model {
-    public id!: number;
-    public login!: string;
-    public password!: string;
-    public age!: number;
+  public id!: number;
+  public login!: string;
+  public password!: string;
+  public age!: number;
 
-    public static initialize(sequelize: Sequelize) {
-      this.init({
+  public static initialize(sequelize: Sequelize) {
+    this.init(
+      {
         id: {
           type: DataTypes.INTEGER,
           autoIncrement: true,
-          primaryKey: true,
+          primaryKey: true
         },
         login: {
           type: new DataTypes.STRING(20),
-          allowNull: false,
+          allowNull: false
         },
         password: {
           type: new DataTypes.STRING(20),
@@ -24,10 +27,20 @@ class User extends Model {
         age: {
           type: DataTypes.INTEGER
         }
-      }, {
-        tableName: 'users',
+      },
+      {
+        tableName: "users",
         sequelize: sequelize
-      });
+      }
+    );
+  }
+
+  public static associate() {
+    this.belongsToMany(Group, {
+      as: "Groups",
+      through: UserGroup,
+      foreignKey: "user_id"
+    });
   }
 }
 

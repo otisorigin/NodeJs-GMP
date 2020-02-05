@@ -38,14 +38,7 @@ const sequelizeLoader = () => {
 
   let models = [User, Group, UserGroup];
   models.forEach(model => model.initialize(sequelize));
-
-  User.belongsToMany(Group, { as: 'Groups', through: UserGroup, foreignKey: 'user_id' });
-  Group.belongsToMany(User, { as: 'Users', through: UserGroup, foreignKey: 'group_id' });
-
-  UserGroup.belongsTo(User, { foreignKey: 'user_id', targetKey: 'id', as: 'User' });
-  UserGroup.belongsTo(Group, { foreignKey: 'group_id', targetKey: 'id', as: 'Group' });
-
-  
+  models.forEach(model => model.associate());
 
   sequelize
     .sync()
