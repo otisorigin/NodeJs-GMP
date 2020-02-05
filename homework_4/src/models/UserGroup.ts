@@ -3,9 +3,6 @@ import User from "./User";
 import Group from "./Group";
 
 class UserGroup extends Model {
-  // public group_id!: number;
-  // public user_id!: number;
-
   public static initialize(sequelize: Sequelize) {
     this.init(
       {
