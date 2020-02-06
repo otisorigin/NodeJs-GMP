@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import HttpException from "../../util/exceptions/HttpException";
-import service from "../../services/groupService";
+import * as service from "../../services/groupService";
 import GroupDTO from "../../util/dto/groupDTO";
 import Utils from "../utils";
 

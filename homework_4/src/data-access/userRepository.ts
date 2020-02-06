@@ -2,9 +2,9 @@ import User from "../models/User";
 import { Op } from "sequelize";
 import UserDTO from "../util/dto/userDTO";
 
-const findAllUsers = () => User.findAll({ raw: true });
+export const findAllUsers = () => User.findAll({ raw: true });
 
-const findAllUsersWithParameters = (
+export const findAllUsersWithParameters = (
   userLimit: number,
   loginSubstring: string
 ) =>
@@ -14,25 +14,16 @@ const findAllUsersWithParameters = (
     where: { login: { [Op.startsWith]: loginSubstring } }
   });
 
-const findUserById = (userId: number) => User.findByPk(userId);
+export const findUserById = (userId: number) => User.findByPk(userId);
 
-const removeUser = (userId: number) => User.destroy({ where: { id: userId } });
+export const removeUser = (userId: number) =>
+  User.destroy({ where: { id: userId } });
 
-const updateUser = (newUser: UserDTO) =>
+export const updateUser = (newUser: UserDTO) =>
   User.findByPk(newUser.id).then(user => user.update(newUser));
 
-const findUserGroups = (userId: number) => {
+export const findUserGroups = (userId: number) => {
   return User.findByPk(userId).then(user => user.getGroups());
 };
 
-const createUser = (newUser: UserDTO) => User.create(newUser);
-
-export default {
-  findAllUsers,
-  findAllUsersWithParameters,
-  findUserById,
-  removeUser,
-  createUser,
-  updateUser,
-  findUserGroups
-};
+export const createUser = (newUser: UserDTO) => User.create(newUser);

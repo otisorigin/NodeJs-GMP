@@ -1,14 +1,14 @@
-import repository from "../data-access/userRepository";
+import * as repository from "../data-access/userRepository";
 import UserDTO from "../util/dto/userDTO";
 import Mappers from "./mappers";
 
-const findAllUsers = () =>
+export const findAllUsers = () =>
   repository
     .findAllUsers()
     .then(users => Mappers.mapUsers(users))
     .then(users => sortUsers(users));
 
-const findAllUsersWithParameters = (
+export const findAllUsersWithParameters = (
   userLimit: number,
   loginSubstring: string
 ) =>
@@ -17,38 +17,27 @@ const findAllUsersWithParameters = (
     .then(users => Mappers.mapUsers(users))
     .then(users => sortUsers(users));
 
-const findUserById = (userId: number) =>
+export const findUserById = (userId: number) =>
   repository.findUserById(userId).then(user => Mappers.mapUser(user));
 
-const removeUser = (userId: number) => repository.removeUser(userId);
+export const removeUser = (userId: number) => repository.removeUser(userId);
 
-const updateUser = (newUser: UserDTO) => repository.updateUser(newUser);
+export const updateUser = (newUser: UserDTO) => repository.updateUser(newUser);
 
-const createUser = (newUser: UserDTO) => repository.createUser(newUser);
+export const createUser = (newUser: UserDTO) => repository.createUser(newUser);
 
-const sortUsers = (users: UserDTO[]) => {
-  return users.sort((a: UserDTO, b: UserDTO) => (a.login > b.login ? 1 : -1));
-};
-
-const findUserGroups = (userId: number) => {
+export const findUserGroups = (userId: number) => {
   return repository
     .findUserGroups(userId)
     .then(groups => Mappers.mapGroups(groups));
 };
 
-const checkUserExists = async (id: number) => {
+export const checkUserExists = async (id: number) => {
   return findUserById(id).then(user => {
     return user ? true : false;
   });
 };
 
-export default {
-  findAllUsers,
-  findAllUsersWithParameters,
-  findUserById,
-  removeUser,
-  updateUser,
-  createUser,
-  checkUserExists,
-  findUserGroups
+const sortUsers = (users: UserDTO[]) => {
+  return users.sort((a: UserDTO, b: UserDTO) => (a.login > b.login ? 1 : -1));
 };

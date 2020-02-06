@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import validator from "../middlewares/requestValidator";
 import userSchema from "../../util/schemas/userSchema";
 import HttpException from "../../util/exceptions/HttpException";
-import service from "../../services/userService";
+import * as service from "../../services/userService";
 import UserDTO from "../../util/dto/userDTO";
 import Utils from "../utils";
 

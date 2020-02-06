@@ -1,7 +1,6 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 import { BelongsToManyGetAssociationsMixin } from "sequelize";
 import Group from "./Group";
-import UserGroup from "./UserGroup";
 
 class User extends Model {
   public id!: number;
@@ -41,7 +40,7 @@ class User extends Model {
   public static associate() {
     this.belongsToMany(Group, {
       as: "Groups",
-      through: UserGroup,
+      through: "user_group",
       foreignKey: "user_id"
     });
   }
