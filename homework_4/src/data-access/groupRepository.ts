@@ -14,13 +14,12 @@ export const updateGroup = (updatedGroup: GroupDTO) =>
 
 export const createGroup = (newGroup: GroupDTO) => Group.create(newGroup);
 
-export const addUsersToGroup = async (groupId: number, userIds: number[]) => {
-  return sequelizeLoader.sequelize.transaction(async t =>
+export const addUsersToGroup = (groupId: number, userIds: number[]) =>
+  sequelizeLoader.sequelize.transaction(async t =>
     Group.findByPk(groupId).then(group =>
       group.addUsers(userIds, { transaction: t })
     )
   );
-};
 
 export const findGroupUsers = (groupId: number) => {
   return Group.findByPk(groupId).then(group => group.getUsers());
