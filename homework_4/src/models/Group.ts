@@ -19,7 +19,7 @@ class Group extends Model {
         id: {
           type: DataTypes.INTEGER,
           autoIncrement: true,
-          primaryKey: true
+          primaryKey: true,
         },
         name: {
           type: new DataTypes.STRING(20),
@@ -41,7 +41,9 @@ class Group extends Model {
     this.belongsToMany(User, {
       as: "Users",
       through: "user_group",
-      foreignKey: "group_id"
+      onDelete: 'CASCADE',
+      foreignKey: {name: "group_id", allowNull: false}, 
+      hooks: true
     });
   }
 }

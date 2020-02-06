@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
-import Models from "../models";
+import User from "../models/User";
+import Group from "../models/Group";
 
 const sequelize = new Sequelize(
   "d6qo402ikvqkmd",
@@ -42,8 +43,9 @@ const sequelizeAuthenticate = (sequelize: Sequelize) => {
 }
 
 const sequelizeModelsInit = (sequelize: Sequelize) => {
-  Models.forEach(model => model.initialize(sequelize));
-  Models.forEach(model => model.associate());
+  let models = [User, Group];
+  models.forEach(model => model.initialize(sequelize));
+  models.forEach(model => model.associate());
 }
 
 const sequelizeSync = (sequelize: Sequelize) => {

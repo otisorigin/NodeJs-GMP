@@ -16,7 +16,7 @@ export const updateGroup = (updatedGroup: GroupDTO) =>
   export const createGroup = (newGroup: GroupDTO) => repository.createGroup(newGroup);
 
   export const checkGroupExists = async (id: number) => {
-  return findGroupById(id).then(group => {
+  return repository.findGroupById(id).then(group => {
     return group ? true : false;
   });
 };

@@ -33,7 +33,7 @@ export const findUserGroups = (userId: number) => {
 };
 
 export const checkUserExists = async (id: number) => {
-  return findUserById(id).then(user => {
+  return repository.findUserById(id).then(user => {
     return user ? true : false;
   });
 };
