@@ -4,7 +4,7 @@ import sequelizeLoader from './sequelize';
 const runLoaders = (app : any) => {
     expressLoader(app);
     console.log("Express loaded");
-    sequelizeLoader();
+    sequelizeLoader.load();
     console.log("Sequelize loaded");
 }
 

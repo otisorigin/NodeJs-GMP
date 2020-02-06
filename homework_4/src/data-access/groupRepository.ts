@@ -1,5 +1,6 @@
 import Group from "../models/Group";
 import GroupDTO from "../util/dto/GroupDTO";
+import sequelizeLoader from "../loaders/sequelize";
 
 export const findAllGroups = () => Group.findAll({ raw: true });
 
@@ -13,14 +14,14 @@ export const updateGroup = (updatedGroup: GroupDTO) =>
 
 export const createGroup = (newGroup: GroupDTO) => Group.create(newGroup);
 
-export const addUsersToGroup = (groupId: number, userIds: number[]) => {
-  return Group.findByPk(groupId).then(group => {
-    return group.addUsers(userIds);
-  });
+export const addUsersToGroup = async (groupId: number, userIds: number[]) => {
+  return sequelizeLoader.sequelize.transaction(async t =>
+    Group.findByPk(groupId).then(group =>
+      group.addUsers(userIds, { transaction: t })
+    )
+  );
 };
 
 export const findGroupUsers = (groupId: number) => {
-  return Group.findByPk(groupId).then(group =>
-    group.getUsers()
-  );
+  return Group.findByPk(groupId).then(group => group.getUsers());
 };
