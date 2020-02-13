@@ -1,9 +1,9 @@
 import Joi from 'joi';
 import HttpException from '../../util/exceptions/HttpException';
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 
-const validator = (schema: any) => {
-    return (req: Request, res: Response, next: NextFunction) => {
+const validator = (schema: any): any => {
+    return (req: Request, res: Response, next: NextFunction): any => {
         const { error } = Joi.validate(req.body, schema);
         const valid = error === null;
         if (valid) {

@@ -1,4 +1,9 @@
-import { Sequelize, Model, DataTypes, BelongsToManyGetAssociationsMixin } from 'sequelize';
+import {
+    Sequelize,
+    Model,
+    DataTypes,
+    BelongsToManyGetAssociationsMixin
+} from 'sequelize';
 
 import Group from './Group';
 
@@ -10,7 +15,7 @@ class User extends Model {
 
   public getGroups!: BelongsToManyGetAssociationsMixin<Group>;
 
-  public static initialize(sequelize: Sequelize) {
+  public static initialize(sequelize: Sequelize): void {
       this.init(
           {
               id: {
@@ -37,7 +42,7 @@ class User extends Model {
       );
   }
 
-  public static associate() {
+  public static associate(): void {
       this.belongsToMany(Group, {
           as: 'Groups',
           through: 'user_group',

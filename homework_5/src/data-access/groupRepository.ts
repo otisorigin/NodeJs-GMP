@@ -3,7 +3,8 @@ import User from '../models/User';
 import GroupDTO from '../util/dto/GroupDTO';
 import sequelize from '../loaders/sequelize';
 
-export const findAllGroups = (): Promise<Group[]> => Group.findAll({ raw: true });
+export const findAllGroups = (): Promise<Group[]> =>
+    Group.findAll({ raw: true });
 
 export const findGroupById = (groupId: number): Promise<Group> =>
     Group.findByPk(groupId);

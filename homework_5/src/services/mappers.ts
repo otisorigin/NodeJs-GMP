@@ -3,14 +3,15 @@ import Group from '../models/Group';
 import UserDTO from '../util/dto/UserDTO';
 import User from '../models/User';
 
-const mapGroups = (groups: Group[]) => groups.map(group => mapGroup(group));
-
-const mapGroup = (group: Group) =>
+const mapGroup = (group: Group): GroupDTO =>
     new GroupDTO(group.id, group.name, group.permissions);
 
-const mapUsers = (users: User[]) => users.map(user => mapUser(user));
+const mapGroups = (groups: Group[]): GroupDTO[] =>
+    groups.map(group => mapGroup(group));
 
-const mapUser = (user: User) =>
+const mapUser = (user: User): UserDTO =>
     new UserDTO(user.id, user.login, user.password, user.age);
+
+const mapUsers = (users: User[]): UserDTO[] => users.map(user => mapUser(user));
 
 export default { mapGroup, mapGroups, mapUser, mapUsers };

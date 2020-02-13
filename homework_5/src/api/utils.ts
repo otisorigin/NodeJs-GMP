@@ -3,7 +3,11 @@ import HttpException from '../util/exceptions/HttpException';
 import UserDTO from '../util/dto/UserDTO';
 import GroupDTO from '../util/dto/GroupDTO';
 
-const sendUsers = (users: UserDTO[], res: Response, next: NextFunction) => {
+const sendUsers = (
+    users: UserDTO[],
+    res: Response,
+    next: NextFunction
+): void => {
     if (users.length !== 0) {
         res.send(users);
     } else {
@@ -11,7 +15,11 @@ const sendUsers = (users: UserDTO[], res: Response, next: NextFunction) => {
     }
 };
 
-const sendGroups = (groups: GroupDTO[], res: Response, next: NextFunction) => {
+const sendGroups = (
+    groups: GroupDTO[],
+    res: Response,
+    next: NextFunction
+): void => {
     if (groups.length !== 0) {
         res.send(groups);
     } else {

@@ -1,12 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
+import { Response } from 'express';
 import HttpException from '../../util/exceptions/HttpException';
 
-const errorHandler = (
-    error: HttpException,
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
+const errorHandler = (error: HttpException, res: Response): void => {
     console.log('Error handling');
     const status = error.status || 500;
     const message = error.message || 'Something went wrong';

@@ -1,4 +1,8 @@
-import { Sequelize, Model, DataTypes, ENUM,
+import {
+    Sequelize,
+    Model,
+    DataTypes,
+    ENUM,
     BelongsToManyGetAssociationsMixin,
     BelongsToManyAddAssociationMixin
 } from 'sequelize';
@@ -13,7 +17,7 @@ class Group extends Model {
   public getUsers!: BelongsToManyGetAssociationsMixin<User>;
   public addUsers!: BelongsToManyAddAssociationMixin<User, number[]>;
 
-  public static initialize(sequelize: Sequelize) {
+  public static initialize(sequelize: Sequelize): void {
       this.init(
           {
               id: {
@@ -37,7 +41,7 @@ class Group extends Model {
       );
   }
 
-  public static associate() {
+  public static associate(): void {
       this.belongsToMany(User, {
           as: 'Users',
           through: 'user_group',

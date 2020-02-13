@@ -10,7 +10,7 @@ const route = Router();
 //  * GET /groups/
 //  * Get all groups.
 //  */
-const findAllGroups = (req: Request, res: Response, next: NextFunction) => {
+const findAllGroups = (req: Request, res: Response, next: NextFunction): void => {
     service
         .findAllGroups()
         .then(groups => Utils.sendGroups(groups, res, next))
@@ -21,7 +21,7 @@ const findAllGroups = (req: Request, res: Response, next: NextFunction) => {
 //  * GET /groups/id
 //  * Get group by id.
 //  */
-const findGroup = (req: Request, res: Response, next: NextFunction) => {
+const findGroup = (req: Request, res: Response, next: NextFunction): void => {
     service
         .findGroupById(Number(req.params.id))
         .then(group => {
@@ -40,16 +40,14 @@ const findGroup = (req: Request, res: Response, next: NextFunction) => {
 //  * PUT /groups/id
 //  * Update group by id.
 //  */
-const updateGroup = async (req: Request, res: Response, next: NextFunction) => {
+const updateGroup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const groupDTO = req.body as GroupDTO;
     const groupExists = await service.checkGroupExists(groupDTO.id);
     if (groupExists) {
         service
             .updateGroup(groupDTO)
             .then(() => res.sendStatus(200))
-            .catch(err => {
-                next(new HttpException(err.message));
-            });
+            .catch(err => next(new HttpException(err.message)));
     } else {
         return next(new HttpException("Can't find group with such id", 400));
     }
@@ -59,7 +57,7 @@ const updateGroup = async (req: Request, res: Response, next: NextFunction) => {
 //  * POST /groups
 //  * Create new group.
 //  */
-const createGroup = async (req: Request, res: Response, next: NextFunction) => {
+const createGroup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const groupDTO = req.body as GroupDTO;
     const groupExists = await service.checkGroupExists(groupDTO.id);
     if (!groupExists) {
@@ -80,7 +78,7 @@ const createGroup = async (req: Request, res: Response, next: NextFunction) => {
 //  * DELETE /groups/id
 //  * Remove group by id.
 //  */
-const deleteGroup = async (req: Request, res: Response, next: NextFunction) => {
+const deleteGroup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const id = Number(req.params.id);
     const groupExists = await service.checkGroupExists(id);
     if (groupExists) {
@@ -101,7 +99,7 @@ const addUsersToGroup = async (
     req: Request,
     res: Response,
     next: NextFunction
-) => {
+): Promise<void> => {
     const groupId = Number(req.params.id);
     const userIds = req.body.users as number[];
     const groupExists = await service.checkGroupExists(groupId);
@@ -123,7 +121,7 @@ const findGroupUsers = async (
     req: Request,
     res: Response,
     next: NextFunction
-) => {
+): Promise<void> => {
     const groupId = Number(req.params.id);
     const groupExists = await service.checkGroupExists(groupId);
     if (groupExists) {
