@@ -1,8 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import HttpException from '../../util/exceptions/HttpException';
 import * as service from '../../services/groupService';
 import GroupDTO from '../../util/dto/GroupDTO';
-import Utils from '../utils';
 
 const route = Router();
 
@@ -10,11 +8,15 @@ const route = Router();
 //  * GET /groups/
 //  * Get all groups.
 //  */
-const findAllGroups = (req: Request, res: Response, next: NextFunction): void => {
+const findAllGroups = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     service
         .findAllGroups()
-        .then(groups => Utils.sendGroups(groups, res, next))
-        .catch(err => next(new HttpException(err.message)));
+        .then(groups => res.send(groups))
+        .catch(err => next(err));
 };
 
 // /**
@@ -24,116 +26,93 @@ const findAllGroups = (req: Request, res: Response, next: NextFunction): void =>
 const findGroup = (req: Request, res: Response, next: NextFunction): void => {
     service
         .findGroupById(Number(req.params.id))
-        .then(group => {
-            if (group) {
-                res.send(group);
-            } else {
-                return next(new HttpException('Group not found', 404));
-            }
-        })
-        .catch(err => {
-            next(new HttpException(err.message));
-        });
+        .then(group => res.send(group))
+        .catch(err => next(err));
 };
 
 // /**
 //  * PUT /groups/id
 //  * Update group by id.
 //  */
-const updateGroup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const updateGroup = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     const groupDTO = req.body as GroupDTO;
-    const groupExists = await service.checkGroupExists(groupDTO.id);
-    if (groupExists) {
-        service
-            .updateGroup(groupDTO)
-            .then(() => res.sendStatus(200))
-            .catch(err => next(new HttpException(err.message)));
-    } else {
-        return next(new HttpException("Can't find group with such id", 400));
-    }
+    service
+        .updateGroup(groupDTO)
+        .then(() => res.sendStatus(200))
+        .catch(err => next(err));
 };
 
 // /**
 //  * POST /groups
 //  * Create new group.
 //  */
-const createGroup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const createGroup = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     const groupDTO = req.body as GroupDTO;
-    const groupExists = await service.checkGroupExists(groupDTO.id);
-    if (!groupExists) {
-        service
-            .createGroup(groupDTO)
-            .then(() =>
-                res.status(201).send({
-                    message: 'Group created.'
-                })
-            )
-            .catch(err => next(new HttpException(err.message)));
-    } else {
-        return next(new HttpException('Group with such id already exists', 400));
-    }
+    service
+        .createGroup(groupDTO)
+        .then(() =>
+            res.status(201).send({
+                message: 'Group created.'
+            })
+        )
+        .catch(err => next(err));
 };
 
 // /**
 //  * DELETE /groups/id
 //  * Remove group by id.
 //  */
-const deleteGroup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const deleteGroup = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     const id = Number(req.params.id);
-    const groupExists = await service.checkGroupExists(id);
-    if (groupExists) {
-        service
-            .removeGroup(id)
-            .then(() => res.sendStatus(200))
-            .catch(err => next(new HttpException(err.message)));
-    } else {
-        return next(new HttpException("Can't find group with such id", 400));
-    }
+    service
+        .removeGroup(id)
+        .then(() => res.sendStatus(200))
+        .catch(err => next(err));
 };
 
 // /**
 //  * POST /groups/id/users
 //  * Add users in group by ids.
 //  */
-const addUsersToGroup = async (
+const addUsersToGroup = (
     req: Request,
     res: Response,
     next: NextFunction
-): Promise<void> => {
+): void => {
     const groupId = Number(req.params.id);
     const userIds = req.body.users as number[];
-    const groupExists = await service.checkGroupExists(groupId);
-    if (groupExists) {
-        service
-            .addUsersToGroup(groupId, userIds)
-            .then(() => res.sendStatus(200))
-            .catch(err => next(new HttpException(err.message)));
-    } else {
-        return next(new HttpException("Can't find group with such id", 400));
-    }
+    service
+        .addUsersToGroup(groupId, userIds)
+        .then(() => res.sendStatus(200))
+        .catch(err => next(err));
 };
 
 // /**
 //  * GET /groups/id/users
 //  * Find users which belongs to this group.
 //  */
-const findGroupUsers = async (
+const findGroupUsers = (
     req: Request,
     res: Response,
     next: NextFunction
-): Promise<void> => {
+): void => {
     const groupId = Number(req.params.id);
-    const groupExists = await service.checkGroupExists(groupId);
-    if (groupExists) {
-        service
-            .findGroupUsers(groupId)
-            .then(users => Utils.sendUsers(users, res, next))
-            .catch(err => {
-                next(new HttpException(err.message));
-            });
-    } else {
-        return next(new HttpException("Can't find group with such id", 400));
-    }
+    service
+        .findGroupUsers(groupId)
+        .then(users => res.send(users))
+        .catch(err => next(err));
 };
 
 route.get('/', findAllGroups);
