@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import winston from 'winston';
 
 const exceptionCodes = new Map([
     ['EntityNotFoundException', 404],
@@ -15,7 +16,8 @@ const errorHandler = (
     const errorName = error.constructor.name.toString();
     const status = exceptionCodes.get(errorName) || 500;
     const message = error.message || 'Something went wrong';
-    console.log(error.stack);
+    console.log(error);
+    winston.warn(error);
     res.status(status).send({
         status,
         message
