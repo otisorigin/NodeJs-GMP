@@ -1,16 +1,18 @@
 import { Sequelize } from 'sequelize';
 import User from '../models/User';
 import Group from '../models/Group';
+import log from './winston';
 
 const sequelizeAuthenticate = (sequelize: Sequelize): void => {
     sequelize
         .authenticate()
         .then(() =>
-            console.log(
-                'Connection to the database has been established successfully.'
-            )
+            log.info('Connection to the database has been established successfully.')
         )
-        .catch(error => console.error('Unable to connect to the database:', error));
+        .catch(error => {
+            log.warn('Unable to connect to the database:');
+            Promise.reject(error);
+        });
 };
 
 const sequelizeModelsInit = (sequelize: Sequelize): void => {
@@ -22,8 +24,11 @@ const sequelizeModelsInit = (sequelize: Sequelize): void => {
 const sequelizeSync = (sequelize: Sequelize): void => {
     sequelize
         .sync()
-        .then(() => console.log('Models synchronized successfully.'))
-        .catch(err => console.log("Can't synchronize models", err));
+        .then(() => log.info('Models synchronized successfully.'))
+        .catch(err => {
+            log.warn("Can't connect to sql server.");
+            Promise.reject(err);
+        });
 };
 
 const load = (sequelize: Sequelize): void => {

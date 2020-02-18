@@ -11,7 +11,6 @@ const validator = (schema: any): any => {
         }
         const { details } = error;
         const message = details.map(i => i.message).join(',');
-        console.log('error', message);
         return next(new ValidationException(message));
     };
 };

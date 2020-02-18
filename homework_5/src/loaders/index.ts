@@ -1,12 +1,13 @@
 import expressLoader from './expressLoader';
 import sequelize from './sequelize';
 import sequelizeLoader from './sequelizeLoader';
+import log from './winston';
 
 const runLoaders = (app: any): void => {
     expressLoader(app);
-    console.log('Express loaded');
+    log.info('Express loaded');
     sequelizeLoader.load(sequelize);
-    console.log('Sequelize loaded');
+    log.info('Sequelize loaded');
 };
 
 export default runLoaders;

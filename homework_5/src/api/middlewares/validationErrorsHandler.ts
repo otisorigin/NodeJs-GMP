@@ -1,27 +1,27 @@
 import { NextFunction, Request, Response } from 'express';
-import winston from 'winston';
 
-const exceptionCodes = new Map([
+const handledExceptions = new Map([
     ['EntityNotFoundException', 404],
     ['EntityAlreadyExistsException', 400],
     ['ValidationException', 400]
 ]);
 
-const errorHandler = (
+const validationErrorsHandler = (
     error: Error,
     req: Request,
     res: Response,
     next: NextFunction
 ): void => {
     const errorName = error.constructor.name.toString();
-    const status = exceptionCodes.get(errorName) || 500;
+    let status = handledExceptions.get(errorName);
+    if (!status) {
+       next(error);
+    }
     const message = error.message || 'Something went wrong';
-    console.log(error);
-    winston.warn(error);
     res.status(status).send({
         status,
         message
     });
 };
 
-export default errorHandler;
+export default validationErrorsHandler;

@@ -21,7 +21,7 @@ export const findAllGroups = (): Promise<GroupDTO[]> =>
 export const findGroupById = (groupId: number): Promise<GroupDTO> =>
     repository.findGroupById(groupId).then(group => {
         if (!group) {
-            throw new EntityNotFoundException("Can't find group with such id");
+            throw new EntityNotFoundException("Can't find group with such id = " + groupId);
         }
         return Mappers.mapGroup(group);
     });
@@ -29,7 +29,7 @@ export const findGroupById = (groupId: number): Promise<GroupDTO> =>
 export const removeGroup = async (groupId: number): Promise<number> => {
     const isGroupExists = await checkGroupExists(groupId);
     if (!isGroupExists) {
-        throw new EntityNotFoundException("Can't find group with such id");
+        throw new EntityNotFoundException("Can't find group with such id = " + groupId);
     }
     return repository.removeGroup(groupId);
 };
@@ -38,7 +38,7 @@ export const removeGroup = async (groupId: number): Promise<number> => {
 export const updateGroup = async (updatedGroup: GroupDTO): Promise<GroupDTO> => {
     const isGroupExists = await checkGroupExists(updatedGroup.id);
     if (!isGroupExists) {
-        throw new EntityNotFoundException("Can't find group with such id");
+        throw new EntityNotFoundException("Can't find group with such id = " + updatedGroup.id);
     }
     return repository.updateGroup(updatedGroup);
 };
@@ -46,7 +46,7 @@ export const updateGroup = async (updatedGroup: GroupDTO): Promise<GroupDTO> => 
 export const createGroup = async (newGroup: GroupDTO): Promise<GroupDTO> => {
     const isGroupExists = await checkGroupExists(newGroup.id);
     if (isGroupExists) {
-        throw new EntityAlreadyExistsException('Group with such id already exists');
+        throw new EntityAlreadyExistsException("Group with such id = " + newGroup.id + "already exists");
     }
     return repository.createGroup(newGroup);
 };
@@ -57,7 +57,7 @@ export const addUsersToGroup = async (
 ): Promise<void> => {
     const isGroupExists = await checkGroupExists(groupId);
     if (!isGroupExists) {
-        throw new EntityNotFoundException("Can't find group with such id");
+        throw new EntityNotFoundException("Can't find group with id = " + groupId);
     }
     // TODO добавить проверку на юзеров!!
     return repository.addUsersToGroup(groupId, userIds);
@@ -66,7 +66,7 @@ export const addUsersToGroup = async (
 export const findGroupUsers = async (groupId: number): Promise<UserDTO[]> => {
     const isGroupExists = await checkGroupExists(groupId);
     if (!isGroupExists) {
-        throw new EntityNotFoundException("Can't find group with such id");
+        throw new EntityNotFoundException("Can't find group with such id = " + groupId);
     }
     return repository
         .findGroupUsers(groupId)
