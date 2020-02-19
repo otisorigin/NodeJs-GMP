@@ -3,27 +3,37 @@ import validationErrorsMiddleware from '../api/middlewares/validationErrorsHandl
 import errorsMiddleware from '../api/middlewares/errorsHandler';
 import controllers from '../api/controllers';
 import log from './winston';
-
-const errorLogger = (error: Error) => {
-    log.error(error.name); 
-    log.error(error.message);
-    log.error(error.stack);
-}
-
-const warningLogger = (error: Error) => {
-    log.warn(error.name); 
-    log.warn(error.message);
-    log.warn(error.stack);
-}
+import { NextFunction } from 'express';
+import {  Request, Response } from 'express';
 
 const expressLoader = (app: any): void => {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
+    // app.use((req: Request, res: Response, next: NextFunction) => {
+    //     res.on('finish', () => {
+    //         log.info('API request.', {
+    //             module: 'core',
+    //             data  : {
+    //                 req: {
+    //                     method: req.method,
+    //                     url   : req.url,
+    //                     ip    : req.ip
+    //                 },
+    //                 res: {
+    //                     statusCode: res.statusCode
+    //                 }
+    //             }
+    //         });
+    //     });
+
+    //     next();
+    // });
     app.use('/api', controllers);
     app.use(validationErrorsMiddleware);
     app.use(errorsMiddleware);
-    app.on('uncaughtException', (error: Error) => errorLogger(error));
-    app.on('unhandledRejection', (error: Error) => warningLogger(error));
+
+    app.on('uncaughtException', (error: Error) => log.error(error.stack));
+    app.on('unhandledRejection', (error: Error) => log.warn(error.stack));
 };
 
 export default expressLoader;

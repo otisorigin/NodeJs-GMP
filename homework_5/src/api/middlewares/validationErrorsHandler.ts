@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import log from '../../loaders/winston';
 
 const handledExceptions = new Map([
     ['EntityNotFoundException', 404],
@@ -13,9 +14,9 @@ const validationErrorsHandler = (
     next: NextFunction
 ): void => {
     const errorName = error.constructor.name.toString();
-    let status = handledExceptions.get(errorName);
+    const status = handledExceptions.get(errorName);
     if (!status) {
-       next(error);
+        return next(error);
     }
     const message = error.message || 'Something went wrong';
     res.status(status).send({
