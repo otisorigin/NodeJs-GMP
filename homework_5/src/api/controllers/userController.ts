@@ -3,6 +3,7 @@ import validator from '../middlewares/requestValidator';
 import userSchema from '../../util/schemas/userSchema';
 import * as service from '../../services/userService';
 import UserDTO from '../../util/dto/UserDTO';
+import log from '../../loaders/winston';
 
 const route = Router();
 
@@ -21,12 +22,18 @@ const findAllUsers = (
         service
             .findAllUsersWithParameters(limit, loginSubstring)
             .then(users => res.send(users))
-            .catch(err => next(err));
+            .catch(err => {
+                log.info("Catched exception in: " + findAllUsers.name + " " +  module.filename);
+                next(err);
+            });
     } else {
         service
             .findAllUsers()
             .then(users => res.send(users))
-            .catch(err => next(err));
+            .catch(err => {
+                log.info("Catched exception in: " + findAllUsers.name + " " +  module.filename);
+                next(err);
+            });
     }
 };
 
@@ -38,7 +45,10 @@ const findUser = (req: Request, res: Response, next: NextFunction): void => {
     service
         .findUserById(Number(req.params.id))
         .then(user => res.send(user))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + findUser.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 /**
@@ -54,7 +64,10 @@ const updateUser = (
     service
         .updateUser(userDTO)
         .then(() => res.sendStatus(200))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + updateUser.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 /**
@@ -74,7 +87,10 @@ const createUser = (
                 message: 'User created.'
             })
         )
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + createUser.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 /**
@@ -90,7 +106,10 @@ const deleteUser = (
     service
         .removeUser(id)
         .then(() => res.sendStatus(200))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + deleteUser.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 /**
@@ -106,7 +125,10 @@ const findUserGroups = (
     service
         .findUserGroups(userId)
         .then(groups => res.send(groups))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + findUserGroups.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 route.get('/', findAllUsers);

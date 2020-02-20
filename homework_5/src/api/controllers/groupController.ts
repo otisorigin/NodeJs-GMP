@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import * as service from '../../services/groupService';
 import GroupDTO from '../../util/dto/GroupDTO';
+import log from '../../loaders/winston';
 
 const route = Router();
 
@@ -16,7 +17,10 @@ const findAllGroups = (
     service
         .findAllGroups()
         .then(groups => res.send(groups))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + findAllGroups.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 // /**
@@ -27,7 +31,10 @@ const findGroup = (req: Request, res: Response, next: NextFunction): void => {
     service
         .findGroupById(Number(req.params.id))
         .then(group => res.send(group))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + findGroup.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 // /**
@@ -43,7 +50,10 @@ const updateGroup = (
     service
         .updateGroup(groupDTO)
         .then(() => res.sendStatus(200))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + updateGroup.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 // /**
@@ -63,7 +73,10 @@ const createGroup = (
                 message: 'Group created.'
             })
         )
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + createGroup.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 // /**
@@ -79,7 +92,10 @@ const deleteGroup = (
     service
         .removeGroup(id)
         .then(() => res.sendStatus(200))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + deleteGroup.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 // /**
@@ -96,7 +112,10 @@ const addUsersToGroup = (
     service
         .addUsersToGroup(groupId, userIds)
         .then(() => res.sendStatus(200))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + addUsersToGroup.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 // /**
@@ -112,7 +131,10 @@ const findGroupUsers = (
     service
         .findGroupUsers(groupId)
         .then(users => res.send(users))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info("Catched exception in: " + findGroupUsers.name + " " +  module.filename);
+            next(err);
+        });
 };
 
 route.get('/', findAllGroups);
