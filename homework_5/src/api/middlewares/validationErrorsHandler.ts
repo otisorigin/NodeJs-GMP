@@ -19,6 +19,7 @@ const validationErrorsHandler = (
         return next(error);
     }
     const message = error.message || 'Something went wrong';
+    log.info(error.stack);
     res.status(status).send({
         status,
         message

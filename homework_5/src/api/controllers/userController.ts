@@ -23,7 +23,9 @@ const findAllUsers = (
             .findAllUsersWithParameters(limit, loginSubstring)
             .then(users => res.send(users))
             .catch(err => {
-                log.info("Catched exception in: " + findAllUsers.name + " " +  module.filename);
+                log.info(
+                    `Catched exception in: ${findAllUsers.name} ${module.filename}`
+                );
                 next(err);
             });
     } else {
@@ -31,7 +33,9 @@ const findAllUsers = (
             .findAllUsers()
             .then(users => res.send(users))
             .catch(err => {
-                log.info("Catched exception in: " + findAllUsers.name + " " +  module.filename);
+                log.info(
+                    `Catched exception in: ${findAllUsers.name} ${module.filename}`
+                );
                 next(err);
             });
     }
@@ -46,7 +50,7 @@ const findUser = (req: Request, res: Response, next: NextFunction): void => {
         .findUserById(Number(req.params.id))
         .then(user => res.send(user))
         .catch(err => {
-            log.info("Catched exception in: " + findUser.name + " " +  module.filename);
+            log.info(`Catched exception in: ${findUser.name} ${module.filename}`);
             next(err);
         });
 };
@@ -55,17 +59,13 @@ const findUser = (req: Request, res: Response, next: NextFunction): void => {
  * PUT /users/id
  * Update user by id.
  */
-const updateUser = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const updateUser = (req: Request, res: Response, next: NextFunction): void => {
     const userDTO = req.body as UserDTO;
     service
         .updateUser(userDTO)
         .then(() => res.sendStatus(200))
         .catch(err => {
-            log.info("Catched exception in: " + updateUser.name + " " +  module.filename);
+            log.info(`Catched exception in: ${updateUser.name} ${module.filename}`);
             next(err);
         });
 };
@@ -74,11 +74,7 @@ const updateUser = (
  * POST /users
  * Create new user.
  */
-const createUser = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const createUser = (req: Request, res: Response, next: NextFunction): void => {
     const userDTO = req.body as UserDTO;
     service
         .createUser(userDTO)
@@ -88,7 +84,7 @@ const createUser = (
             })
         )
         .catch(err => {
-            log.info("Catched exception in: " + createUser.name + " " +  module.filename);
+            log.info(`Catched exception in: ${createUser.name} ${module.filename}`);
             next(err);
         });
 };
@@ -97,17 +93,13 @@ const createUser = (
  * DELETE /users/id
  * Remove user by id.
  */
-const deleteUser = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const deleteUser = (req: Request, res: Response, next: NextFunction): void => {
     const id = Number(req.params.id);
     service
         .removeUser(id)
         .then(() => res.sendStatus(200))
         .catch(err => {
-            log.info("Catched exception in: " + deleteUser.name + " " +  module.filename);
+            log.info(`Catched exception in: ${deleteUser.name} ${module.filename}`);
             next(err);
         });
 };
@@ -126,7 +118,9 @@ const findUserGroups = (
         .findUserGroups(userId)
         .then(groups => res.send(groups))
         .catch(err => {
-            log.info("Catched exception in: " + findUserGroups.name + " " +  module.filename);
+            log.info(
+                `Catched exception in: ${findUserGroups.name} ${module.filename}`
+            );
             next(err);
         });
 };

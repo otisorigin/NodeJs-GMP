@@ -18,7 +18,9 @@ const findAllGroups = (
         .findAllGroups()
         .then(groups => res.send(groups))
         .catch(err => {
-            log.info("Catched exception in: " + findAllGroups.name + " " +  module.filename);
+            log.info(
+                `Catched exception in: ${findAllGroups.name} ${module.filename}`
+            );
             next(err);
         });
 };
@@ -32,7 +34,7 @@ const findGroup = (req: Request, res: Response, next: NextFunction): void => {
         .findGroupById(Number(req.params.id))
         .then(group => res.send(group))
         .catch(err => {
-            log.info("Catched exception in: " + findGroup.name + " " +  module.filename);
+            log.info(`Catched exception in: ${findGroup.name} ${module.filename}`);
             next(err);
         });
 };
@@ -41,17 +43,13 @@ const findGroup = (req: Request, res: Response, next: NextFunction): void => {
 //  * PUT /groups/id
 //  * Update group by id.
 //  */
-const updateGroup = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const updateGroup = (req: Request, res: Response, next: NextFunction): void => {
     const groupDTO = req.body as GroupDTO;
     service
         .updateGroup(groupDTO)
         .then(() => res.sendStatus(200))
         .catch(err => {
-            log.info("Catched exception in: " + updateGroup.name + " " +  module.filename);
+            log.info(`Catched exception in: ${updateGroup.name} ${module.filename}`);
             next(err);
         });
 };
@@ -60,11 +58,7 @@ const updateGroup = (
 //  * POST /groups
 //  * Create new group.
 //  */
-const createGroup = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const createGroup = (req: Request, res: Response, next: NextFunction): void => {
     const groupDTO = req.body as GroupDTO;
     service
         .createGroup(groupDTO)
@@ -74,7 +68,7 @@ const createGroup = (
             })
         )
         .catch(err => {
-            log.info("Catched exception in: " + createGroup.name + " " +  module.filename);
+            log.info(`Catched exception in: ${createGroup.name} ${module.filename}`);
             next(err);
         });
 };
@@ -83,17 +77,13 @@ const createGroup = (
 //  * DELETE /groups/id
 //  * Remove group by id.
 //  */
-const deleteGroup = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const deleteGroup = (req: Request, res: Response, next: NextFunction): void => {
     const id = Number(req.params.id);
     service
         .removeGroup(id)
         .then(() => res.sendStatus(200))
         .catch(err => {
-            log.info("Catched exception in: " + deleteGroup.name + " " +  module.filename);
+            log.info(`Catched exception in: ${deleteGroup.name} ${module.filename}`);
             next(err);
         });
 };
@@ -113,7 +103,9 @@ const addUsersToGroup = (
         .addUsersToGroup(groupId, userIds)
         .then(() => res.sendStatus(200))
         .catch(err => {
-            log.info("Catched exception in: " + addUsersToGroup.name + " " +  module.filename);
+            log.info(
+                `Catched exception in: ${addUsersToGroup.name} ${module.filename}`
+            );
             next(err);
         });
 };
@@ -132,7 +124,9 @@ const findGroupUsers = (
         .findGroupUsers(groupId)
         .then(users => res.send(users))
         .catch(err => {
-            log.info("Catched exception in: " + findGroupUsers.name + " " +  module.filename);
+            log.info(
+                `Catched exception in: ${findGroupUsers.name} ${module.filename}`
+            );
             next(err);
         });
 };
