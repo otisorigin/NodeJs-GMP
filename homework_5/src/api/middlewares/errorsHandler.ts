@@ -7,9 +7,9 @@ const errorsHandler = (
     res: Response,
     next: NextFunction
 ): void => {
-    log.warn(error.stack);
     const status = 500;
     const message = error.message || 'Something went wrong';
+    log.warn(error.stack);
     res.status(status).send({
         status,
         message
