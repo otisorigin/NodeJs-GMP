@@ -1,7 +1,7 @@
 import Group from '../models/Group';
 import User from '../models/User';
 import GroupDTO from '../types/dto/GroupDTO';
-import sequelize from '../util/sequelize';
+import sequelize from '../utils/sequelize';
 
 export const findAllGroups = (): Promise<Group[]> =>
     Group.findAll({ raw: true });

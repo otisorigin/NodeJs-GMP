@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import log from '../../util/winston';
+import log from '../../utils/winston';
 
 const errorsHandler = (
     error: Error,
@@ -7,11 +7,9 @@ const errorsHandler = (
     res: Response,
     next: NextFunction
 ): void => {
-    log.warn(error.name);
-    log.warn(error.message);
-    log.warn(error.stack);
     const status = 500;
     const message = error.message || 'Something went wrong';
+    log.warn(error.stack);
     res.status(status).send({
         status,
         message

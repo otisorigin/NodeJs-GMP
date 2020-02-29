@@ -1,6 +1,6 @@
 import * as repository from '../data-access/userRepository';
 import UserDTO from '../types/dto/UserDTO';
-import Mappers from '../util/mappers';
+import Mappers from '../utils/mappers';
 import GroupDTO from '../types/dto/GroupDTO';
 import EntityNotFoundException from '../types/exceptions/EntityNotFoundException';
 import EntityAlreadyExistsException from '../types/exceptions/EntityAlreadyExistsException';
@@ -41,7 +41,7 @@ export const findAllUsersWithParameters = (
 export const findUserById = (userId: number): Promise<UserDTO> =>
     repository.findUserById(userId).then(user => {
         if (!user) {
-            throw new EntityNotFoundException(`Can't find user with id = ${  userId}`);
+            throw new EntityNotFoundException(`Can't find user with id = ${userId}`);
         }
         return Mappers.mapUser(user);
     });
@@ -50,7 +50,7 @@ export const removeUser = (userId: number): Promise<number> =>
     repository.removeUser(userId).then(user => {
         if (!user) {
             throw new EntityNotFoundException(
-                `Can't find user with such id = ${  userId}`
+                `Can't find user with such id = ${userId}`
             );
         }
         return user;
@@ -60,7 +60,7 @@ export const updateUser = (newUser: UserDTO): Promise<UserDTO> =>
     repository.updateUser(newUser).then(user => {
         if (!user) {
             throw new EntityNotFoundException(
-                `Can't find user with such id = ${  newUser.id}`
+                `Can't find user with such id = ${newUser.id}`
             );
         }
         return user;
@@ -70,7 +70,7 @@ export const createUser = async (newUser: UserDTO): Promise<UserDTO> => {
     const isUserExists = await checkUserExists(newUser.id);
     if (isUserExists) {
         throw new EntityAlreadyExistsException(
-            `User with id = ${  newUser.id  } already exists`
+            `User with id = ${newUser.id} already exists`
         );
     }
     return repository.createUser(newUser);
@@ -79,7 +79,7 @@ export const createUser = async (newUser: UserDTO): Promise<UserDTO> => {
 export const findUserGroups = async (userId: number): Promise<GroupDTO[]> => {
     const isUserExists = await checkUserExists(userId);
     if (!isUserExists) {
-        throw new EntityNotFoundException(`Can't find user with id = ${  userId}`);
+        throw new EntityNotFoundException(`Can't find user with id = ${userId}`);
     }
     return repository.findUserGroups(userId).then(groups => {
         if (!groups) {
