@@ -3,6 +3,7 @@ import validator from '../middlewares/requestValidator';
 import userSchema from '../../util/schemas/userSchema';
 import * as service from '../../services/userService';
 import UserDTO from '../../util/dto/UserDTO';
+import log from '../../loaders/winston';
 
 const route = Router();
 
@@ -21,12 +22,22 @@ const findAllUsers = (
         service
             .findAllUsersWithParameters(limit, loginSubstring)
             .then(users => res.send(users))
-            .catch(err => next(err));
+            .catch(err => {
+                log.info(
+                    `Catched exception in: ${findAllUsers.name} ${module.filename}`
+                );
+                next(err);
+            });
     } else {
         service
             .findAllUsers()
             .then(users => res.send(users))
-            .catch(err => next(err));
+            .catch(err => {
+                log.info(
+                    `Catched exception in: ${findAllUsers.name} ${module.filename}`
+                );
+                next(err);
+            });
     }
 };
 
@@ -38,34 +49,32 @@ const findUser = (req: Request, res: Response, next: NextFunction): void => {
     service
         .findUserById(Number(req.params.id))
         .then(user => res.send(user))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info(`Catched exception in: ${findUser.name} ${module.filename}`);
+            next(err);
+        });
 };
 
 /**
  * PUT /users/id
  * Update user by id.
  */
-const updateUser = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const updateUser = (req: Request, res: Response, next: NextFunction): void => {
     const userDTO = req.body as UserDTO;
     service
         .updateUser(userDTO)
         .then(() => res.sendStatus(200))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info(`Catched exception in: ${updateUser.name} ${module.filename}`);
+            next(err);
+        });
 };
 
 /**
  * POST /users
  * Create new user.
  */
-const createUser = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const createUser = (req: Request, res: Response, next: NextFunction): void => {
     const userDTO = req.body as UserDTO;
     service
         .createUser(userDTO)
@@ -74,23 +83,25 @@ const createUser = (
                 message: 'User created.'
             })
         )
-        .catch(err => next(err));
+        .catch(err => {
+            log.info(`Catched exception in: ${createUser.name} ${module.filename}`);
+            next(err);
+        });
 };
 
 /**
  * DELETE /users/id
  * Remove user by id.
  */
-const deleteUser = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+const deleteUser = (req: Request, res: Response, next: NextFunction): void => {
     const id = Number(req.params.id);
     service
         .removeUser(id)
         .then(() => res.sendStatus(200))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info(`Catched exception in: ${deleteUser.name} ${module.filename}`);
+            next(err);
+        });
 };
 
 /**
@@ -106,7 +117,12 @@ const findUserGroups = (
     service
         .findUserGroups(userId)
         .then(groups => res.send(groups))
-        .catch(err => next(err));
+        .catch(err => {
+            log.info(
+                `Catched exception in: ${findUserGroups.name} ${module.filename}`
+            );
+            next(err);
+        });
 };
 
 route.get('/', findAllUsers);

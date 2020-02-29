@@ -1,9 +1,9 @@
-import { Sequelize } from 'sequelize';
 import User from '../models/User';
 import Group from '../models/Group';
 import log from './winston';
+import sequelize from './sequelize';
 
-const sequelizeAuthenticate = (sequelize: Sequelize): void => {
+const sequelizeAuthenticate = (): void => {
     sequelize
         .authenticate()
         .then(() =>
@@ -15,13 +15,13 @@ const sequelizeAuthenticate = (sequelize: Sequelize): void => {
         });
 };
 
-const sequelizeModelsInit = (sequelize: Sequelize): void => {
+const sequelizeModelsInit = (): void => {
     const models = [User, Group];
     models.forEach(model => model.initialize(sequelize));
     models.forEach(model => model.associate());
 };
 
-const sequelizeSync = (sequelize: Sequelize): void => {
+const sequelizeSync = (): void => {
     sequelize
         .sync()
         .then(() => log.info('Models synchronized successfully.'))
@@ -31,10 +31,10 @@ const sequelizeSync = (sequelize: Sequelize): void => {
         });
 };
 
-const load = (sequelize: Sequelize): void => {
-    sequelizeAuthenticate(sequelize);
-    sequelizeModelsInit(sequelize);
-    sequelizeSync(sequelize);
+const load = (): void => {
+    sequelizeAuthenticate();
+    sequelizeModelsInit();
+    sequelizeSync();
 };
 
-export default { load };
+export default load;
