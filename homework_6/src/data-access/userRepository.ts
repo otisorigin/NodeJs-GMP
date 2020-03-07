@@ -18,6 +18,9 @@ export const findAllUsersWithParameters = (
 export const findUserById = (userId: number): Promise<User> =>
     User.findByPk(userId);
 
+export const findUserByLogin = (userLogin: string): Promise<User> =>
+    User.findOne({ where: { login: userLogin } });
+
 export const removeUser = (userId: number): Promise<number> =>
     User.destroy({ where: { id: userId } });
 

@@ -4,7 +4,8 @@ import log from '../../utils/winston';
 const handledExceptions = new Map([
     ['EntityNotFoundException', 404],
     ['EntityAlreadyExistsException', 400],
-    ['ValidationException', 400]
+    ['ValidationException', 400],
+    ['UnauthorizedException', 401]
 ]);
 
 const validationErrorsHandler = (

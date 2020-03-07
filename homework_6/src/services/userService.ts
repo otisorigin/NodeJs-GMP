@@ -4,6 +4,7 @@ import Mappers from '../utils/mappers';
 import GroupDTO from '../types/dto/GroupDTO';
 import EntityNotFoundException from '../types/exceptions/EntityNotFoundException';
 import EntityAlreadyExistsException from '../types/exceptions/EntityAlreadyExistsException';
+import UnauthorizedException from '../types/exceptions/UnauthorizedException';
 
 const sortUsers = (users: UserDTO[]): UserDTO[] => {
     return users.sort((a: UserDTO, b: UserDTO) => (a.login > b.login ? 1 : -1));
@@ -42,6 +43,14 @@ export const findUserById = (userId: number): Promise<UserDTO> =>
     repository.findUserById(userId).then(user => {
         if (!user) {
             throw new EntityNotFoundException(`Can't find user with id = ${userId}`);
+        }
+        return Mappers.mapUser(user);
+    });
+
+export const findUserByLogin = (login: string): Promise<UserDTO> =>
+    repository.findUserByLogin(login).then(user => {
+        if (!user) {
+            throw new UnauthorizedException('Incorrect login or password');
         }
         return Mappers.mapUser(user);
     });
