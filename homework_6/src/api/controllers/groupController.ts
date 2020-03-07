@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import * as service from '../../services/groupService';
 import GroupDTO from '../../types/dto/GroupDTO';
 import log from '../../utils/winston';
+import auth from '../middlewares/tokenValidator';
 
 const route = Router();
 
@@ -131,12 +132,12 @@ const findGroupUsers = (
         });
 };
 
-route.get('/', findAllGroups);
-route.get('/:id', findGroup);
-route.post('/', createGroup);
-route.put('/:id', updateGroup);
-route.delete('/:id', deleteGroup);
-route.post('/:id/users/', addUsersToGroup);
-route.get('/:id/users/', findGroupUsers);
+route.get('/', auth, findAllGroups);
+route.get('/:id', auth, findGroup);
+route.post('/', auth, createGroup);
+route.put('/:id', auth, updateGroup);
+route.delete('/:id', auth, deleteGroup);
+route.post('/:id/users/', auth, addUsersToGroup);
+route.get('/:id/users/', auth, findGroupUsers);
 
 export default route;

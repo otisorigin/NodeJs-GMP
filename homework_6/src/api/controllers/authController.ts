@@ -11,7 +11,7 @@ const route = Router();
 
 const generateToken = (user: UserDTO): string => {
   const payload = { id: user.id, age: user.age };
-  return jwt.sign(payload, "secret", { expiresIn: 10 });
+  return jwt.sign(payload, "secret", { expiresIn: 30 });
 };
 
 const login = async (
@@ -25,7 +25,7 @@ const login = async (
       throw new UnauthorizedException("Incorrect login or password");
     } else {
       const token = generateToken(user);
-      res.send({ token: token });
+      res.send({ token });
     }
   } catch (err) {
     log.info(`Catched exception in: ${login} ${module.filename}`);
