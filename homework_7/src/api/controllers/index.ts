@@ -7,7 +7,7 @@ import authController from './authController';
 const router: Router = Router();
 
 // Connect controllers
-router.use('/users', userController);
+router.use('/users', userController.route);
 router.use('/groups', groupController);
 router.use('/auth', authController);
 

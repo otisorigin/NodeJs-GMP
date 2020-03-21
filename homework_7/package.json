@@ -22,6 +22,7 @@
     "eslint-plugin-import": "^2.20.1",
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
+    "supertest": "^4.0.2",
     "ts-jest": "^25.2.1",
     "ts-node": "^8.5.4",
     "typescript": "^3.8.3"
@@ -31,6 +32,7 @@
     "@types/cors": "^2.8.6",
     "@types/jsonwebtoken": "^8.3.8",
     "@types/sequelize": "^4.28.8",
+    "@types/supertest": "^2.0.8",
     "@types/validator": "^12.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -38,6 +40,7 @@
     "express": "^4.17.1",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
+    "minimist": ">=1.2.2",
     "pg": "^7.17.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.3",

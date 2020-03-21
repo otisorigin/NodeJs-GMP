@@ -8,6 +8,7 @@ const httpLogger = (req: Request, res: Response, next: NextFunction): void => {
             data: {
                 req: {
                     method: req.method,
+                    originalUrl: req.originalUrl,
                     url: req.url,
                     ip: req.ip
                 },
