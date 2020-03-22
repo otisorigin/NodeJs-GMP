@@ -1,0 +1,387 @@
+swagger: '2.0'
+info:
+  description: This is a simple API
+  version: 1.0.0
+  title: NodeJS-GMP API
+  # put the contact info for your development or API team
+  contact:
+    email: you@your-company.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: users
+  description: Users in application
+- name: groups
+  description: Groups in application
+
+paths:
+  /users:
+    get:
+      tags:
+      - users
+      summary: find all users
+      operationId: findAllUsers
+      description: |
+        Find all users in system.
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: loginSubstring
+        description: substring in login
+        required: true
+        type: string
+      - in: query
+        name: limit
+        description: maximum number of records to return
+        type: integer
+        format: int32
+        required: true
+        minimum: 0
+        maximum: 50
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - users
+      summary: adds a new user
+      operationId: addUser
+      description: |
+        Adds new user to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: User
+        description: User item to add
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          description: item created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing item already exists
+    put:
+      tags:
+      - users
+      summary: update user
+      operationId: updateUser
+      description: Update user in the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: User
+        description: User item to add
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        200:
+          description: item updated
+        400:
+          description: invalid input, object invalid
+  /users/{id}:
+    get:
+      tags:
+      - users
+      summary: find user by id
+      operationId: findUserById
+      description: Find user in the system
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
+      responses:
+        200:
+          description: search result
+          schema:
+              $ref: '#/definitions/User'
+        400:
+          description: invalid input, object invalid
+    delete:
+      tags:
+      - users
+      summary: remove user by id
+      operationId: removeUserById
+      description: Remove user in system
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
+      responses:
+        200:
+          description: user removed
+          schema:
+              $ref: '#/definitions/User'
+        400:
+          description: invalid input, object invalid
+  /users/{id}/groups:
+    get:
+      tags:
+      - users
+      summary: get all groups of user with id
+      operationId: findUserGroups
+      description: Find all user groups
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
+        400:
+          description: invalid input, object invalid
+  /groups:
+    get:
+      tags:
+      - groups
+      summary: find all groups
+      operationId: findAllGroups
+      description: |
+        Find all groups in system.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - groups
+      summary: adds a new group
+      operationId: addGroup
+      description: |
+        Adds new group to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: Group
+        description: Group item to add
+        schema:
+          $ref: '#/definitions/Group'
+      responses:
+        201:
+          description: item created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing item already exists
+    put:
+      tags:
+      - groups
+      summary: update Group
+      operationId: updateGroup
+      description: Update group in the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: Group
+        description: Group item to add
+        schema:
+          $ref: '#/definitions/Group'
+      responses:
+        200:
+          description: item updated
+        400:
+          description: invalid input, object invalid
+  /groups/{id}:
+    get:
+      tags:
+      - groups
+      summary: find group by id
+      operationId: findGroupById
+      description: Find group in the system
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The group ID
+      responses:
+        200:
+          description: search result
+          schema:
+              $ref: '#/definitions/Group'
+        400:
+          description: invalid input, object invalid
+    delete:
+      tags:
+      - groups
+      summary: remove group by id
+      operationId: removeGroupById
+      description: Remove group in system
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The group ID
+      responses:
+        200:
+          description: group removed
+          schema:
+              $ref: '#/definitions/Group'
+        400:
+          description: invalid input, object invalid
+  /groups/{id}/users:
+    get:
+      tags:
+      - groups
+      summary: get all users of group with id
+      operationId: findGroupUsers
+      description: Find all groups of user
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The group ID
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: invalid input, object invalid
+    post:
+      tags:
+      - groups
+      summary: adds users to a group
+      operationId: addUsersToGroup
+      description: |
+        Adds list of users to group
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The group ID
+        - in: body
+          name: users
+          description: users ids to add to group
+          schema:
+              $ref: '#/definitions/UsersIDs'
+      responses:
+        201:
+          description: item added
+        400:
+          description: invalid input, object invalid
+definitions:
+  User:
+    required:
+    - id
+    - login
+    - password
+    - age
+    properties:
+      id:
+        type: number
+        example: 15
+      login:
+        type: string
+        example: Super_User
+      password:
+        type: string
+        pattern: /^(?=.*?[A-Za-z])(?=.*?[0-9]).*$/
+        example: padsadsadA2
+      age:
+        type: number
+        example: 15
+  Group:
+    required:
+    - id
+    - name
+    - permissions
+    properties:
+      id:
+        type: number
+        example: 1
+      name:
+        type: string
+        example: TEST_GROUP
+      permissions:
+        type: array
+        items:
+          type: string
+          example: READ
+        example: [READ, WRITE]
+  UsersIDs:
+    properties:
+      users:
+        type: array
+        items:
+          type: number
+          example: 1
+        example: [1, 2]
+# Added by API Auto Mocking Plugin
+# host: localhost:3000
+# basePath: /api
+schemes:
+ - https
+# Added by API Auto Mocking Plugin
+# host: localhost:3000
+host: localhost:3000
+basePath: /api

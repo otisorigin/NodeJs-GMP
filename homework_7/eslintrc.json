@@ -40,6 +40,7 @@
   "rules": {
     "@typescript-eslint/require-await": "off",
     "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-empty-function": "off",
     "no-debugger": 1,
     "comma-dangle": [2, "never"],
     "no-cond-assign": [2, "always"],
