@@ -37,84 +37,94 @@ const findAllUsers = async (
  * GET /users/id
  * Get user by id.
  */
-const findUser = (req: Request, res: Response, next: NextFunction): void => {
-  service
-    .findUserById(Number(req.params.id))
-    .then(user => res.send(user))
-    .catch(err => {
-      log.info(`Catched exception in: ${findUser.name} ${module.filename}`);
-      next(err);
-    });
+const findUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    let user = await service.findUserById(Number(req.params.id));
+    res.send(user);
+  } catch (err) {
+    log.info(`Catched exception in: ${findUser.name} ${module.filename}`);
+    next(err);
+  }
 };
 
 /**
  * PUT /users/id
  * Update user by id.
  */
-const updateUser = (req: Request, res: Response, next: NextFunction): void => {
+const updateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const userDTO = req.body as UserDTO;
-  service
-    .updateUser(userDTO)
-    .then(() => res.sendStatus(200))
-    .catch(err => {
-      log.info(`Catched exception in: ${updateUser.name} ${module.filename}`);
-      next(err);
-    });
+  try {
+    await service.updateUser(userDTO);
+    res.sendStatus(200);
+  } catch (err) {
+    log.info(`Catched exception in: ${updateUser.name} ${module.filename}`);
+    next(err);
+  }
 };
 
 /**
  * POST /users
  * Create new user.
  */
-const createUser = (req: Request, res: Response, next: NextFunction): void => {
+const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const userDTO = req.body as UserDTO;
-  service
-    .createUser(userDTO)
-    .then(() =>
-      res.status(201).send({
-        message: "User created."
-      })
-    )
-    .catch(err => {
-      log.info(`Catched exception in: ${createUser.name} ${module.filename}`);
-      next(err);
+  try {
+    await service.createUser(userDTO);
+    res.status(201).send({
+      message: "User created."
     });
+  } catch (err) {
+    log.info(`Catched exception in: ${createUser.name} ${module.filename}`);
+    next(err);
+  }
 };
 
 /**
  * DELETE /users/id
  * Remove user by id.
  */
-const deleteUser = (req: Request, res: Response, next: NextFunction): void => {
-  const id = Number(req.params.id);
-  service
-    .removeUser(id)
-    .then(() => res.sendStatus(200))
-    .catch(err => {
-      log.info(`Catched exception in: ${deleteUser.name} ${module.filename}`);
-      next(err);
-    });
+const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    await service.removeUser(Number(req.params.id));
+    res.sendStatus(200);
+  } catch (err) {
+    log.info(`Catched exception in: ${deleteUser.name} ${module.filename}`);
+    next(err);
+  }
 };
 
 /**
  * GET /users/id/groups/
  * Get groups which belongs to this user.
  */
-const findUserGroups = (
+const findUserGroups = async (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
-  const userId = Number(req.params.id);
-  service
-    .findUserGroups(userId)
-    .then(groups => res.send(groups))
-    .catch(err => {
-      log.info(
-        `Catched exception in: ${findUserGroups.name} ${module.filename}`
-      );
-      next(err);
-    });
+): Promise<void> => {
+  try {
+    let groups = await service.findUserGroups(Number(req.params.id));
+    res.send(groups);
+  } catch (err) {
+    log.info(`Catched exception in: ${findUserGroups.name} ${module.filename}`);
+    next(err);
+  }
 };
 
 route.get("/", auth, findAllUsers);
