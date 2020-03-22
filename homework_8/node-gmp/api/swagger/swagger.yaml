@@ -13,14 +13,57 @@ info:
 
 # tags are used for organizing operations
 tags:
+- name: auth
+  description: authentication in application
 - name: users
   description: Users in application
 - name: groups
   description: Groups in application
+  
+securityDefinitions:
+   APIKeyHeader:
+     type: apiKey
+     in: header
+     name: x-access-token
 
 paths:
+  /auth:
+    post:
+      tags:
+        - auth
+      summary: authenticate user
+      operationId: authUser
+      description: |
+        Authentication for user.
+      parameters:
+      - in: body
+        name: User
+        description: User item to add
+        schema:
+          properties:
+            login:
+              type: string
+              example: SUPER_USER_229
+              description: User's login
+            password:
+              type: string
+              example: psadhjhkhhjA2
+              description: User's password
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            properties:
+              token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjUsImFnZSI6NCwiaWF0IjoxNTg0OTExNDEwLCJleHAiOjE1ODQ5MTE0NDB9.Rlu72YLExhyGlOi50sY3Qvmmwifv5s5QQbLpxyqUdF0
+                description: Authenticate token
+        401:
+          description: Incorrect login or password
   /users:
     get:
+      security:
+        - APIKeyHeader: []
       tags:
       - users
       summary: find all users
@@ -52,7 +95,11 @@ paths:
               $ref: '#/definitions/User'
         400:
           description: bad input parameter
+        401:
+          description: Access token is missing or invalid
     post:
+      security:
+        - APIKeyHeader: []
       tags:
       - users
       summary: adds a new user
@@ -76,7 +123,11 @@ paths:
           description: invalid input, object invalid
         409:
           description: an existing item already exists
+        401:
+          description: Access token is missing or invalid
     put:
+      security:
+        - APIKeyHeader: []
       tags:
       - users
       summary: update user
@@ -97,8 +148,12 @@ paths:
           description: item updated
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
   /users/{id}:
     get:
+      security:
+        - APIKeyHeader: []
       tags:
       - users
       summary: find user by id
@@ -120,7 +175,11 @@ paths:
               $ref: '#/definitions/User'
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
     delete:
+      security:
+        - APIKeyHeader: []
       tags:
       - users
       summary: remove user by id
@@ -142,8 +201,12 @@ paths:
               $ref: '#/definitions/User'
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
   /users/{id}/groups:
     get:
+      security:
+        - APIKeyHeader: []
       tags:
       - users
       summary: get all groups of user with id
@@ -167,8 +230,12 @@ paths:
               $ref: '#/definitions/Group'
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
   /groups:
     get:
+      security:
+        - APIKeyHeader: []
       tags:
       - groups
       summary: find all groups
@@ -186,7 +253,11 @@ paths:
               $ref: '#/definitions/Group'
         400:
           description: bad input parameter
+        401:
+          description: Access token is missing or invalid
     post:
+      security:
+        - APIKeyHeader: []
       tags:
       - groups
       summary: adds a new group
@@ -210,7 +281,11 @@ paths:
           description: invalid input, object invalid
         409:
           description: an existing item already exists
+        401:
+          description: Access token is missing or invalid
     put:
+      security:
+        - APIKeyHeader: []
       tags:
       - groups
       summary: update Group
@@ -231,8 +306,12 @@ paths:
           description: item updated
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
   /groups/{id}:
     get:
+      security:
+        - APIKeyHeader: []
       tags:
       - groups
       summary: find group by id
@@ -254,7 +333,11 @@ paths:
               $ref: '#/definitions/Group'
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
     delete:
+      security:
+        - APIKeyHeader: []
       tags:
       - groups
       summary: remove group by id
@@ -276,8 +359,12 @@ paths:
               $ref: '#/definitions/Group'
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
   /groups/{id}/users:
     get:
+      security:
+        - APIKeyHeader: []
       tags:
       - groups
       summary: get all users of group with id
@@ -301,7 +388,11 @@ paths:
               $ref: '#/definitions/User'
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
     post:
+      security:
+        - APIKeyHeader: []
       tags:
       - groups
       summary: adds users to a group
@@ -323,12 +414,20 @@ paths:
           name: users
           description: users ids to add to group
           schema:
-              $ref: '#/definitions/UsersIDs'
+            properties:
+              users:
+                type: array
+                items:
+                  type: number
+                  example: 1
+                example: [1, 2]
       responses:
         201:
           description: item added
         400:
           description: invalid input, object invalid
+        401:
+          description: Access token is missing or invalid
 definitions:
   User:
     required:
@@ -368,20 +467,14 @@ definitions:
           type: string
           example: READ
         example: [READ, WRITE]
-  UsersIDs:
-    properties:
-      users:
-        type: array
-        items:
-          type: number
-          example: 1
-        example: [1, 2]
-# Added by API Auto Mocking Plugin
-# host: localhost:3000
+# host: 127.0.0.1
 # basePath: /api
 schemes:
  - https
+ - http
 # Added by API Auto Mocking Plugin
-# host: localhost:3000
-host: localhost:3000
-basePath: /api
+# host: 127.0.0.1:3000
+# basePath: /api
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /otisorigin/Node-GMP/1.0.0
