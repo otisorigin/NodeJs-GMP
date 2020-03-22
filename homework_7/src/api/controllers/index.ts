@@ -1,14 +1,14 @@
-import { Router } from 'express';
+import { Router } from "express";
 
-import userController from './userController';
-import groupController from './groupController';
-import authController from './authController';
+import userController from "./userController";
+import groupController from "./groupController";
+import authController from "./authController";
 
 const router: Router = Router();
 
 // Connect controllers
-router.use('/users', userController.route);
-router.use('/groups', groupController);
-router.use('/auth', authController);
+router.use("/users", userController.route);
+router.use("/groups", groupController.route);
+router.use("/auth", authController);
 
 export default router;

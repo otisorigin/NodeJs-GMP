@@ -32,7 +32,7 @@ jest.mock("../../../src/services/userService", () => ({
     }),
   createUser: jest
     .fn()
-    .mockImplementationOnce(() => [testUser])
+    .mockImplementationOnce(() => testUser)
     .mockImplementationOnce(() => {
       throw error;
     }),
