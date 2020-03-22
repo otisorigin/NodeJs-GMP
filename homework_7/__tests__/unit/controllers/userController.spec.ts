@@ -84,18 +84,8 @@ describe("Find all Users", () => {
     expect(mockNext).toHaveBeenCalledWith(error);
   });
   test("Find all users with parameters", async () => {
-    const mockRequestWithParam: any = {
-      body: {
-        loginSubstring: "str",
-        limit: 5
-      }
-    } as Request;
-
-    await userController.findAllUsers(
-      mockRequestWithParam,
-      mockResponse,
-      mockNext
-    );
+    (mockRequest.body.loginSubstring = "str"), (mockRequest.body.limit = 5);
+    await userController.findAllUsers(mockRequest, mockResponse, mockNext);
     expect(findAllUsersWithParameters).toHaveBeenCalled();
     expect(mockResponse.send).toHaveBeenCalledWith([]);
   });
