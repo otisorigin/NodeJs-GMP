@@ -12,33 +12,24 @@ const route = Router();
  * GET /users/
  * Get all users. In body parameters subLogin and limit.
  */
-const findAllUsers = (
+const findAllUsers = async (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): Promise<void> => {
   const loginSubstring = req.body.loginSubstring;
   const limit = req.body.limit;
-  if (loginSubstring !== undefined && limit !== undefined) {
-    service
-      .findAllUsersWithParameters(limit, loginSubstring)
-      .then(users => res.send(users))
-      .catch(err => {
-        log.info(
-          `Catched exception in: ${findAllUsers.name} ${module.filename}`
-        );
-        next(err);
-      });
-  } else {
-    service
-      .findAllUsers()
-      .then(users => res.send(users))
-      .catch(err => {
-        log.info(
-          `Catched exception in: ${findAllUsers.name} ${module.filename}`
-        );
-        next(err);
-      });
+  try {
+    let users;
+    if (loginSubstring !== undefined && limit !== undefined) {
+      users = await service.findAllUsersWithParameters(limit, loginSubstring);
+    } else {
+      users = await service.findAllUsers();
+    }
+    res.send(users);
+  } catch (err) {
+    log.info(`Catched exception in: ${findAllUsers.name} ${module.filename}`);
+    next(err);
   }
 };
 

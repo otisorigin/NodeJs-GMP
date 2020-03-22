@@ -1,21 +1,21 @@
-import express from 'express';
-import runLoaders from './loaders/index';
-import log from './utils/winston';
+import express from "express";
+import load from "./loaders/index";
+import log from "./utils/winston";
 
-const app = express();
+const startServer = async (): Promise<void> => {
+  const app = express();
+  app.set("port", process.env.PORT || 3000);
 
-const server = app.listen(
-    app.get('port'),
-    async (): Promise<void> => {
-        app.set('port', process.env.PORT || 3000);
-        await runLoaders(app);
-        log.info(
-            'App is running at http://localhost:%d in %s mode',
-            app.get('port'),
-            app.get('env')
-        );
-        log.info('Press CTRL-C to stop!\n');
-    }
-);
+  await load(app);
 
-export default server;
+  app.listen(app.get("port"), () => {
+    log.info(
+      "App is running at http://localhost:%d in %s mode",
+      app.get("port"),
+      app.get("env")
+    );
+    log.info("Press CTRL-C to stop!\n");
+  });
+};
+
+startServer();
